@@ -22,8 +22,8 @@
             margin: 0;
             padding: 0;
             font-family: 'Outfit', sans-serif;
-            background-color: var(--black);
-            color: var(--creamy);
+            background-color: var(--creamy);
+            color: var(--black);
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
@@ -47,7 +47,7 @@
         .logo {
             font-size: 1.5rem;
             font-weight: 800;
-            color: var(--creamy);
+            color: var(--black);
             text-decoration: none;
             letter-spacing: 1px;
             font-family: 'Playfair Display', serif;
@@ -66,11 +66,11 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: 0.3s;
-            color: var(--creamy);
+            color: var(--black);
         }
 
         .btn-connexion {
-            color: var(--creamy);
+            color: var(--black);
         }
         .btn-connexion:hover {
             color: var(--terracotta);
@@ -112,7 +112,7 @@
             font-size: 3rem;
             line-height: 1.1;
             margin: 0 0 10px 0;
-            color: var(--creamy);
+            color: var(--black);
             font-weight: 800;
         }
 
@@ -140,8 +140,8 @@
 
         .btn-pill {
             display: inline-block;
-            border: 1px solid var(--terracotta);
-            color: var(--creamy);
+            border: 1px solid var(--black);
+            color: var(--black);
             padding: 10px 25px;
             border-radius: 30px;
             font-size: 0.9rem;
@@ -274,7 +274,7 @@
 
         .section-title {
             font-size: 2.2rem;
-            color: var(--creamy);
+            color: var(--black);
             text-align: center;
             margin-bottom: 40px;
             font-family: 'Playfair Display', serif;
@@ -288,7 +288,7 @@
         }
 
         .feature-card {
-            background: #1A1A1A; /* Noir plus clair */
+            background: white;
             padding: 30px 20px;
             border-radius: 16px;
             text-align: center;
@@ -324,7 +324,7 @@
 
         .feature-card p {
             font-size: 0.85rem;
-            color: #aaa;
+            color: #555;
             line-height: 1.5;
         }
 
@@ -370,12 +370,12 @@
             border: 5px solid var(--creamy);
         }
 
-        .step-item h3 { font-size: 1.1rem; margin-bottom: 10px; color: var(--creamy); }
-        .step-item p { font-size: 0.85rem; color: #aaa; }
+        .step-item h3 { font-size: 1.1rem; margin-bottom: 10px; color: var(--black); }
+        .step-item p { font-size: 0.85rem; color: #555; }
 
         /* Footer */
         .footer {
-            background-color: #0f0f0f;
+            background-color: var(--black);
             color: var(--creamy);
             text-align: center;
             padding: 40px 20px;
@@ -422,7 +422,7 @@
                 La première plateforme dédiée à la découverte des trésors culinaires de la Tunisie. Trouvez les meilleurs restaurants, lisez les avis de la communauté et réservez votre table.
             </p>
             <div class="hero-actions">
-                <a href="{% url 'index' %}" class="btn-pill" style="background-color: var(--terracotta); color: var(--creamy);">Commencer l'aventure</a>
+                <a href="{% url 'index' %}" class="btn-pill" style="background-color: var(--black); color: var(--creamy); border-color: var(--black);">Commencer l'aventure</a>
                 <a href="#pourquoi" class="btn-pill">En savoir plus</a>
             </div>
         </div>
