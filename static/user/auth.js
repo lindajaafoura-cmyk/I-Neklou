@@ -25,6 +25,13 @@ if (signInButton) {
     });
 }
 
+// Auto-open register panel if action=register is in the URL
+if (window.location.search.includes('action=register')) {
+    if (container) {
+        container.classList.add('right-panel-active');
+    }
+}
+
 // Basculer sur mobile
 const mobileSignUp = document.getElementById('mobileSignUp');
 const mobileSignIns = document.querySelectorAll('.mobileSignIn');

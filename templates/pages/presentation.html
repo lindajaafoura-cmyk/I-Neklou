@@ -3,291 +3,488 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I-Neklou - Découvrez la Gastronomie</title>
+    <title>I-Neklou - Votre guide culinaire</title>
     {% load static %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #0f0f0f; /* Fond très sombre */
-            --accent-color: #E2A62C; /* Jaune moutarde / doré */
-            --text-color: #ffffff;
-            --text-muted: #888888;
+            --creamy: #FFF6E0; /* Fond creamy chaud */
+            --terracotta: #C86B53; /* Orange brûlé / terracotta */
+            --basil: #4A6B53; /* Vert basilic */
+            --black: #2A2A2A; /* Noir doux */
+            --accent-yellow: #E8B44A; /* Optionnel pour quelques touches */
         }
 
         body, html {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            height: 100vh;
-            overflow: hidden; /* Fixe la page sans scroll pour un style 'Slide' */
-            
-            /* Vos Curseurs Personnalisés */
-            cursor: url('{% static "images/cursor-normal.png" %}'), auto;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--black);
+            color: var(--creamy);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        a, button, .btn-start, .btn-connexion {
-            cursor: url('{% static "images/cursor-pointer.png" %}'), pointer;
-        }
-
-        .main-wrapper {
-            max-width: 1400px;
-            margin: 0 auto;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 0 50px;
-            position: relative;
-        }
+        /* --- Custom Cursors --- */
+        body, html { cursor: url('{% static "images/cursor-normal.png" %}'), auto; }
+        a, button, .btn, .btn-pill { cursor: url('{% static "images/cursor-pointer.png" %}'), pointer; }
 
         /* --- Navbar --- */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 40px 0;
-            z-index: 10;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-decoration: none;
-            color: white;
-        }
-
-        .logo-icon {
-            width: 35px;
-            height: 35px;
-            background-color: white;
+            padding: 20px 40px;
             position: relative;
+            z-index: 20;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .logo-icon::before {
-            content: '';
-            position: absolute;
-            top: 5px; left: 5px; right: 5px; bottom: 5px;
-            border: 2px solid var(--bg-color);
-        }
-
-        .logo-text {
-            font-family: 'Anton', sans-serif;
+        .logo {
             font-size: 1.5rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--creamy);
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-family: 'Playfair Display', serif;
         }
 
         .nav-links {
             display: flex;
-            gap: 40px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
+            gap: 20px;
             align-items: center;
         }
 
         .nav-links a {
-            color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.75rem;
             font-weight: 600;
+            font-size: 0.95rem;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--text-color);
+            letter-spacing: 1px;
+            transition: 0.3s;
+            color: var(--creamy);
         }
 
         .btn-connexion {
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color) !important;
-            padding: 10px 24px;
-            border-radius: 4px;
-            font-size: 0.75rem;
+            color: var(--creamy);
         }
-        
         .btn-connexion:hover {
-            background-color: var(--accent-color);
-            color: var(--bg-color) !important;
+            color: var(--terracotta);
+        }
+
+        .btn-inscription {
+            background-color: var(--terracotta);
+            color: var(--creamy);
+            padding: 10px 25px;
+            border-radius: 30px;
+            border: 2px solid var(--terracotta);
+        }
+        .btn-inscription:hover {
+            background-color: transparent;
+            color: var(--terracotta);
         }
 
         /* --- Hero Section --- */
         .hero {
-            display: flex;
-            flex-grow: 1;
-            align-items: center;
             position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            z-index: 10;
         }
 
         .hero-left {
             flex: 1;
-            padding-right: 50px;
-            z-index: 2;
+            padding-right: 0; /* Retrait du padding à droite */
+            position: relative;
+            z-index: 5;
         }
 
         .hero-left h1 {
-            font-family: 'Anton', sans-serif;
-            font-size: 5rem;
-            line-height: 1.05;
-            margin: 0 0 20px 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            font-size: 3rem;
+            line-height: 1.1;
+            margin: 0 0 10px 0;
+            color: var(--creamy);
+            font-weight: 800;
+        }
+
+        .hero-left h1 span {
+            color: var(--terracotta);
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 3.8rem;
+            font-weight: 700;
+            margin-top: -5px;
         }
 
         .hero-left p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.8;
-            max-width: 450px;
+            font-size: 1rem;
+            color: #ccc;
+            line-height: 1.6;
             margin-bottom: 40px;
-            letter-spacing: 0.5px;
+            max-width: 500px;
         }
 
-        .btn-start {
-            display: inline-block;
-            border: 1px solid var(--text-muted);
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 14px 40px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-
-        .btn-start:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-        }
-
-        .hero-right {
-            position: absolute;
-            right: -250px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 800px;
-            height: 800px;
-            z-index: 1;
-        }
-
-        /* L'assiette géante coupée par le bord */
-        .plate-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            box-shadow: -30px 30px 80px rgba(0,0,0,0.9);
-        }
-
-        /* La tomate ou élément flottant en bas à gauche de l'assiette */
-        .floating-item {
-            position: absolute;
-            bottom: 100px;
-            left: 50px;
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-            z-index: 3;
-        }
-
-        /* Indicateurs de points (gauche) */
-        .side-dots {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
+        .hero-actions {
             display: flex;
-            flex-direction: column;
             gap: 15px;
-            z-index: 5;
         }
-        
-        .dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--text-muted);
-            border-radius: 50%;
-            cursor: pointer;
+
+        .btn-pill {
+            display: inline-block;
+            border: 1px solid var(--terracotta);
+            color: var(--creamy);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            font-weight: 600;
             transition: 0.3s;
         }
 
-        .dot.active, .dot:hover {
-            background-color: var(--accent-color);
+        .btn-pill:hover {
+            background-color: var(--terracotta);
+            color: var(--creamy);
         }
 
-        @media (max-width: 1200px) {
-            .hero-right { right: -300px; width: 700px; height: 700px; }
-            .hero-left h1 { font-size: 4rem; }
+        .hero-right {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        /* L'image principale */
+        .plate-img {
+            width: 100%;
+            max-width: 500px;
+            object-fit: contain;
+            filter: drop-shadow(0px 15px 30px rgba(0,0,0,0.6));
+            z-index: 5;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* --- Formes en fond (Background Shapes) --- */
+        .shapes-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+        }
+
+        /* Grands cercles */
+        .circle-terracotta {
+            width: 350px;
+            height: 350px;
+            border: 60px solid var(--terracotta);
+            border-radius: 50%;
+            top: -100px;
+            left: -150px;
+            opacity: 0.9;
+        }
+        
+        .circle-solid-terracotta {
+            width: 70px;
+            height: 70px;
+            background-color: var(--terracotta);
+            border-radius: 50%;
+            top: 25%;
+            left: 38%;
+        }
+
+        .circle-basil {
+            width: 450px;
+            height: 450px;
+            border: 80px solid var(--basil);
+            border-radius: 50%;
+            bottom: -200px;
+            right: -150px;
+            opacity: 0.15; /* Très doux en fond */
+        }
+
+        /* Croix */
+        .cross {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+        }
+        .cross::before, .cross::after {
+            content: '';
+            position: absolute;
+            background-color: var(--terracotta);
+            border-radius: 10px;
+        }
+        .cross::before { width: 100%; height: 12px; top: 14px; left: 0; }
+        .cross::after { height: 100%; width: 12px; left: 14px; top: 0; }
+
+        .cross-1 { top: 10%; right: 45%; transform: rotate(45deg) scale(0.8); }
+        .cross-2 { bottom: 10%; left: 40%; transform: rotate(15deg); }
+
+        /* Zigzags (vagues) */
+        .zigzag {
+            width: 50px;
+            height: 50px;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, var(--accent-yellow) 5px, var(--accent-yellow) 8px);
+            opacity: 0.8;
+        }
+        .zigzag-1 { top: 20%; right: 10%; }
+        .zigzag-2 { bottom: 20%; left: 50%; }
+
+        /* Points */
+        .dots {
+            width: 40px;
+            height: 40px;
+            background-image: radial-gradient(var(--accent-yellow) 30%, transparent 30%);
+            background-size: 10px 10px;
+        }
+        .dots-1 { bottom: 5%; left: 5%; }
+
+        /* --- Sections de contenu --- */
+        .section-wrapper {
+            padding: 60px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: var(--creamy);
+            text-align: center;
+            margin-bottom: 40px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Pourquoi choisir I-Neklou */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: #1A1A1A; /* Noir plus clair */
+            padding: 30px 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border-bottom: 4px solid var(--terracotta);
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            border-bottom-color: var(--basil);
+        }
+
+        .feature-icon {
+            width: 55px;
+            height: 55px;
+            background-color: var(--creamy);
+            color: var(--terracotta);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            margin: 0 auto 15px auto;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--creamy);
+        }
+
+        .feature-card p {
+            font-size: 0.85rem;
+            color: #aaa;
+            line-height: 1.5;
+        }
+
+        /* Comment ça marche */
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background-color: rgba(0,0,0,0.05);
+            z-index: 1;
+        }
+
+        .step-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 0 20px;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background-color: var(--basil);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 auto 15px auto;
+            border: 5px solid var(--creamy);
+        }
+
+        .step-item h3 { font-size: 1.1rem; margin-bottom: 10px; color: var(--creamy); }
+        .step-item p { font-size: 0.85rem; color: #aaa; }
+
+        /* Footer */
+        .footer {
+            background-color: #0f0f0f;
+            color: var(--creamy);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
         }
 
         @media (max-width: 992px) {
-            .main-wrapper { padding: 0 20px; }
-            body, html { overflow: auto; height: auto; }
-            .hero { flex-direction: column; text-align: center; justify-content: center; padding-bottom: 50px; margin-top: 50px; }
-            .hero-right { position: relative; right: auto; top: auto; transform: none; width: 300px; height: 300px; margin-top: 40px; }
+            .hero { flex-direction: column; text-align: center; padding: 40px 20px; }
             .hero-left { padding-right: 0; }
-            .hero-left p { margin: 0 auto 30px auto; }
-            .floating-item { display: none; }
-            .side-dots { display: none; }
-            .nav-links { display: none; } /* Cache les liens sur mobile */
+            .plate-img { width: 100%; margin-top: 40px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .steps-container { flex-direction: column; gap: 40px; }
+            .steps-container::before { display: none; }
+            .circle-terracotta { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="main-wrapper">
-        <!-- Pagination (les points verticaux à gauche) -->
-        <div class="side-dots">
-            <div class="dot active"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        </div>
-
-        <nav class="navbar">
-            <a href="{% url 'presentation' %}" class="logo-area">
-                <div class="logo-icon"></div>
-                <div class="logo-text">I-Neklou</div>
-            </a>
-
-            <ul class="nav-links">
-                <li><a href="#" class="active">Accueil</a></li>
-                <li><a href="{% url 'index' %}">Menu</a></li>
-                <li><a href="#">Galerie</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="{% url 'auth' %}" class="btn-connexion">Connexion</a></li>
-            </ul>
-        </nav>
-
-        <section class="hero">
-            <div class="hero-left">
-                <h1>LA MEILLEURE<br>QUALITÉ<br>C'EST TOUT!</h1>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
-                <a href="{% url 'index' %}" class="btn-start">Commencer l'aventure</a>
-            </div>
-
-            <div class="hero-right">
-                <!-- Grande image coupée sur la droite (une assiette vue de haut) -->
-                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Delicious dish" class="plate-img">
-                
-                <!-- Petit élément flottant en bas à gauche de l'assiette (tomate) -->
-                <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Tomato" class="floating-item">
-            </div>
-        </section>
+    <!-- Formes décoratives (inspirées de la capture) -->
+    <div class="shapes-bg">
+        <div class="shape circle-terracotta"></div>
+        <div class="shape circle-solid-terracotta"></div>
+        <div class="shape circle-basil"></div>
+        <div class="shape cross cross-1"></div>
+        <div class="shape cross cross-2"></div>
+        <div class="shape zigzag zigzag-1"></div>
+        <div class="shape zigzag zigzag-2"></div>
+        <div class="shape dots dots-1"></div>
     </div>
+
+    <nav class="navbar">
+        <a href="{% url 'presentation' %}" class="logo">I-Neklou</a>
+        <div class="nav-links">
+            <a href="{% url 'auth' %}" class="btn-connexion">Connexion</a>
+            <a href="{% url 'auth' %}?action=register" class="btn-inscription">S'inscrire</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-left">
+            <h1>DÉCOUVREZ<br><span>La Tunisie</span></h1>
+            <p>
+                La première plateforme dédiée à la découverte des trésors culinaires de la Tunisie. Trouvez les meilleurs restaurants, lisez les avis de la communauté et réservez votre table.
+            </p>
+            <div class="hero-actions">
+                <a href="{% url 'index' %}" class="btn-pill" style="background-color: var(--terracotta); color: var(--creamy);">Commencer l'aventure</a>
+                <a href="#pourquoi" class="btn-pill">En savoir plus</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <!-- Une image gastronomique très classe, détourée ou ronde -->
+            <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Plat Gastronomique" class="plate-img">
+        </div>
+    </section>
+
+    <!-- Pourquoi choisir I-Neklou -->
+    <section class="section-wrapper" id="pourquoi">
+        <h2 class="section-title">Pourquoi choisir I-Neklou ?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-search"></i></div>
+                <h3>Recherche Intelligente</h3>
+                <p>Trouvez le restaurant idéal grâce à nos filtres par spécialité, ville et budget. Tout est conçu pour faciliter votre choix.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-heart"></i></div>
+                <h3>Avis & Communauté</h3>
+                <p>Fiez-vous aux expériences partagées par nos gourmets et ajoutez vos propres avis pour aider les autres membres.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-star"></i></div>
+                <h3>Fidélité Récompensée</h3>
+                <p>Cumulez des points lors de chaque réservation et débloquez des offres exclusives chez nos partenaires privilégiés.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comment ça marche -->
+    <section class="section-wrapper">
+        <h2 class="section-title" style="color: var(--basil);">Comment ça marche ?</h2>
+        <div class="steps-container">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <h3>Recherchez</h3>
+                <p>Explorez notre vaste catalogue de restaurants tunisiens et trouvez votre coup de cœur.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number" style="background-color: var(--terracotta);">2</div>
+                <h3>Réservez</h3>
+                <p>Sélectionnez la date, l'heure et le nombre de convives, puis confirmez en un clic.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number" style="background-color: var(--accent-yellow); color: var(--black);">3</div>
+                <h3>Dégustez</h3>
+                <p>Rendez-vous sur place, savourez votre repas et n'oubliez pas de partager votre avis !</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <h2 style="font-family: 'Playfair Display', serif; color: var(--terracotta);">I-Neklou</h2>
+        <p>L'expérience culinaire tunisienne à portée de clic.</p>
+        <div style="margin-top: 20px;">
+            <a href="#" style="color: var(--creamy); margin: 0 10px; font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
+            <a href="#" style="color: var(--creamy); margin: 0 10px; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: #666;">&copy; 2026 DineTunis - Tous droits réservés.</p>
+    </footer>
 
 </body>
 </html>
