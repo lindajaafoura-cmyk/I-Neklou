@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,141 +7,256 @@
     {% load static %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'user/styles.css' %}?v={% now 'U' %}">
     <style>
+        :root {
+            --cream: #f9f6f0;
+            --shadow-warm: 0 15px 35px rgba(0,0,0,0.08);
+        }
 
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lato', sans-serif;
+            background-color: #fff;
+            color: #333;
+        }
 
         .landing-hero {
-            height: 80vh;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            /* Nouvelle photo de restaurant élégante */
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80');
             background-size: cover;
             background-position: center;
             color: white;
+            padding: 20px;
+        }
+
+        .landing-hero-content {
+            max-width: 900px;
         }
 
         .landing-hero h1 {
-            font-size: 4rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
             margin-bottom: 20px;
-            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
         }
 
         .landing-hero p {
-            font-size: 1.5rem;
-            margin-bottom: 30px;
-            max-width: 800px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.4;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: white;
+            color: #111;
+            text-decoration: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 40px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            border: 2px solid white;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: white;
         }
 
         .features-section {
-            padding: 80px 0;
+            padding: 120px 20px;
             background: var(--cream);
+            text-align: center;
+        }
+
+        .features-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            margin-bottom: 50px;
+            color: #111;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
+        /* 3 Bulles */
         .feature-card {
             background: white;
-            padding: 40px;
-            border-radius: 16px;
-            text-align: center;
+            padding: 30px 20px;
+            border-radius: 50%; /* Forme de bulle */
+            aspect-ratio: 1; /* Garantit un cercle parfait */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             box-shadow: var(--shadow-warm);
-            transition: transform 0.3s;
+            transition: transform 0.4s, box-shadow 0.4s;
+            border: 4px solid white;
         }
 
         .feature-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
         }
 
         .feature-card h3 {
-            margin-bottom: 15px;
-            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+            color: #111;
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.5;
+            padding: 0 10px;
         }
 
         .cta-section {
-            padding: 100px 0;
+            padding: 100px 20px;
             text-align: center;
             background: white;
         }
 
         .cta-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #111;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .footer {
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 40px;
+            font-size: 1rem;
+            font-family: 'Lato', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 992px) {
+            .landing-hero h1 { font-size: 2.5rem; }
+            .landing-hero p { font-size: 1.2rem; }
+            .feature-card {
+                border-radius: 20px; /* Moins rond sur mobile pour gagner de la place */
+                aspect-ratio: auto;
+                padding: 40px 20px;
+            }
+        }
+        
+        /* Navbar */
+        .navbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .navbar .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            padding: 10px 25px;
+            font-size: 1rem;
+            border-radius: 30px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: #111;
         }
     </style>
 </head>
-
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-content">
-                <a href="{% url 'index' %}" class="logo">
-                    <span class="logo-text">I-Neklou</span>
-                </a>
-
-                <div class="auth-buttons">
-                    <a href="{% url 'auth' %}" class="btn btn-outline">Connexion</a>
-                    <a href="{% url 'auth' %}" class="btn btn-primary">S'inscrire</a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
     <header class="landing-hero">
-        <div class="container">
+        <nav class="navbar">
+            <a href="{% url 'presentation' %}" class="logo">I-Neklou</a>
+            <a href="{% url 'auth' %}" class="btn-outline">S'inscrire / Connexion</a>
+        </nav>
+        
+        <div class="landing-hero-content">
             <h1>Bienvenue sur I-Neklou</h1>
-            <p>La première plateforme dédiée à la découverte des trésors culinaires de la Tunisie. Trouvez, réservez et
-                savourez.</p>
-            <a href="{% url 'auth' %}" class="btn btn-primary" style="padding: 15px 40px; font-size: 1.2rem;">Commencer
-                l'aventure</a>
+            <p>La première plateforme dédiée à la découverte des trésors culinaires de la Tunisie. Trouvez, réservez et savourez.</p>
+            <a href="{% url 'index' %}" class="btn-primary">Commencer l'aventure</a>
         </div>
     </header>
 
     <section class="features-section">
-        <div class="container">
-            <h2 style="text-align: center; font-size: 2.5rem;">Pourquoi choisir I-Neklou ?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <h3>Recherche Intelligente</h3>
-                    <p>Filtrez par ville, type de cuisine ou budget pour trouver exactement ce que vous cherchez.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Favoris & Avis</h3>
-                    <p>Enregistrez vos restaurants préférés et partagez vos expériences avec la communauté.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Programme de Fidélité</h3>
-                    <p>Gagnez des points à chaque visite et profitez de réductions exclusives dans nos restaurants
-                        partenaires.</p>
-                </div>
+        <h2>Pourquoi choisir I-Neklou ?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Recherche Intelligente</h3>
+                <p>Filtrez par ville, type de cuisine ou budget pour trouver exactement ce que vous cherchez.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Favoris & Avis</h3>
+                <p>Enregistrez vos restaurants préférés et partagez vos expériences avec la communauté.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Programme de Fidélité</h3>
+                <p>Gagnez des points à chaque visite et profitez de réductions exclusives dans nos restaurants partenaires.</p>
             </div>
         </div>
     </section>
 
     <section class="cta-section">
-        <div class="container">
-            <h2>Prêt à découvrir les meilleurs restaurants ?</h2>
-            <p style="margin-bottom: 40px; font-size: 1.2rem;">Rejoignez des milliers de gourmets tunisiens dès
-                aujourd'hui.</p>
-            <a href="{% url 'auth' %}" class="btn btn-primary" style="padding: 15px 40px; font-size: 1.2rem;">Créer mon
-                compte gratuitement</a>
-        </div>
+        <h2>Prêt à découvrir les meilleurs restaurants ?</h2>
+        <p>Rejoignez des milliers de gourmets tunisiens dès aujourd'hui.</p>
+        <a href="{% url 'auth' %}" class="btn-primary" style="background: #111; color: white; border-color: #111;">Créer mon compte gratuitement</a>
     </section>
 
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 I-Neklou. Tous droits réservés.</p>
-        </div>
+        <p>&copy; 2026 I-Neklou. Tous droits réservés.</p>
     </footer>
 
 </body>
-
 </html>

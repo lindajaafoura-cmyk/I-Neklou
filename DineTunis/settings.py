@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-#e@4g=a*d=ls3b@h+-7yg@w)#ld)!z%e_qcm&ps+3&@0o8xfx$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+if 'RENDER_EXTERNAL_HOSTNAME' in os.environ:
+    ALLOWED_HOSTS.append(os.environ.get('RENDER_EXTERNAL_HOSTNAME'))
 
 
 # Application definition
@@ -82,8 +84,7 @@ DATABASES = {
     'mongodb': {
         'ENGINE': 'django_mongodb_backend',
         'NAME': 'DineTunis_Raw',
-        'HOST': 'localhost',
-        'PORT': 27017,
+        'HOST': os.environ.get('MONGODB_URI', 'localhost'),
     }
 }
 

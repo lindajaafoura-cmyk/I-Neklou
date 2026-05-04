@@ -21,8 +21,8 @@ from .views_admin      import (
 
 urlpatterns = [
     # ── Pages utilisateur ──────────────────────────────────
-    path('presentation/',                   presentation,           name='presentation'),
-    path('',                                index,                  name='index'),
+    path('',                                presentation,           name='presentation'),
+    path('catalogue/',                      index,                  name='index'),
     path('connexion/',                      auth,                   name='auth'),
     path('deconnexion/',                    logout_view,            name='logout'),
     path('mon-compte/',                     mon_compte,             name='mon_compte'),
