@@ -11,17 +11,31 @@
     <link rel="stylesheet" href="{% static 'user/styles.css' %}?v={% now 'U' %}">
     <style>
         :root {
-            --cream: #f9f6f0;
-            --shadow-warm: 0 15px 35px rgba(0,0,0,0.08);
+            --cream: #fffaf2;
+            --primary: #E0542B; /* Terracotta/Orange vibrant */
+            --primary-hover: #C03F1D;
+            --secondary: #2B4E41; /* Vert sapin profond */
+            --accent: #F2A65A; /* Orange clair / Safran */
+            --shadow-warm: 0 15px 35px rgba(224, 84, 43, 0.15);
         }
 
+        /* --- CURSEURS PERSONNALISÉS --- */
+        /* J'ai configuré ici vos curseurs personnalisés ! */
         body, html {
             margin: 0;
             padding: 0;
             font-family: 'Lato', sans-serif;
             background-color: #fff;
             color: #333;
+            /* Curseur principal (ex: l'assiette) */
+            cursor: url('{% static "images/cursor-normal.png" %}'), auto; 
         }
+
+        /* Curseur de survol pour les boutons et liens (ex: le wrap) */
+        a, button, .btn-primary, .btn-outline, .feature-card {
+            cursor: url('{% static "images/cursor-pointer.png" %}'), pointer; 
+        }
+        /* ------------------------------- */
 
         .landing-hero {
             height: 100vh;
@@ -29,12 +43,61 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            /* Nouvelle photo de restaurant élégante */
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80');
+            /* Nouvelle photo très colorée et gourmande */
+            background: linear-gradient(rgba(43, 78, 65, 0.5), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80');
             background-size: cover;
             background-position: center;
             color: white;
             padding: 20px;
+            position: relative;
+        }
+
+        /* Navbar raffinée */
+        .navbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px); /* Effet de flou moderne */
+        }
+
+        .navbar .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        /* Bouton de la Navbar (Classe) */
+        .btn-outline {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            padding: 8px 22px;
+            font-size: 0.95rem;
+            border-radius: 30px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(224, 84, 43, 0.4);
+            transform: translateY(-2px);
         }
 
         .landing-hero-content {
@@ -47,7 +110,13 @@
             margin-bottom: 20px;
             font-weight: 700;
             letter-spacing: 2px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.6);
+            color: #fff;
+        }
+
+        .landing-hero h1 span {
+            color: var(--accent);
+            font-style: italic;
         }
 
         .landing-hero p {
@@ -55,32 +124,36 @@
             font-style: italic;
             font-size: 1.4rem;
             margin-bottom: 40px;
-            color: rgba(255, 255, 255, 0.95);
-            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
         }
 
+        /* Bouton Principal (Hero) */
         .btn-primary {
             display: inline-block;
-            background: white;
-            color: #111;
+            background: var(--primary);
+            color: white;
             text-decoration: none;
-            padding: 15px 40px;
+            padding: 16px 40px;
             font-size: 1.1rem;
             border-radius: 40px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
-            transition: all 0.3s;
-            border: 2px solid white;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            box-shadow: 0 8px 25px rgba(224, 84, 43, 0.5);
         }
 
         .btn-primary:hover {
-            background: transparent;
+            background: var(--primary-hover);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(224, 84, 43, 0.6);
             color: white;
         }
 
         .features-section {
-            padding: 120px 20px;
+            padding: 100px 20px;
             background: var(--cream);
             text-align: center;
         }
@@ -88,130 +161,110 @@
         .features-section h2 {
             font-family: 'Playfair Display', serif;
             font-size: 2.8rem;
-            margin-bottom: 50px;
-            color: #111;
+            margin-bottom: 60px;
+            color: var(--secondary);
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 40px;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        /* 3 Bulles */
+        /* 3 Bulles Colorées */
         .feature-card {
             background: white;
             padding: 30px 20px;
-            border-radius: 50%; /* Forme de bulle */
-            aspect-ratio: 1; /* Garantit un cercle parfait */
+            border-radius: 50%;
+            aspect-ratio: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             box-shadow: var(--shadow-warm);
-            transition: transform 0.4s, box-shadow 0.4s;
-            border: 4px solid white;
+            transition: all 0.4s ease;
+            border: 6px solid var(--cream);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Contour coloré au survol pour les bulles */
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -6px; left: -6px; right: -6px; bottom: -6px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .feature-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+            border-color: transparent;
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
         }
 
         .feature-card h3 {
             font-family: 'Playfair Display', serif;
-            margin-bottom: 10px;
-            font-size: 1.4rem;
-            color: #111;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+            color: var(--secondary);
         }
 
         .feature-card p {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #555;
             line-height: 1.5;
-            padding: 0 10px;
+            padding: 0 15px;
         }
 
         .cta-section {
             padding: 100px 20px;
             text-align: center;
-            background: white;
+            background: var(--secondary); /* Vert sapin */
+            color: white;
         }
 
         .cta-section h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 20px;
-            color: #111;
+            color: var(--cream);
         }
 
         .cta-section p {
-            font-size: 1.3rem;
-            color: #666;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 40px;
         }
 
         .footer {
             background: #111;
-            color: white;
+            color: rgba(255, 255, 255, 0.6);
             text-align: center;
-            padding: 40px;
-            font-size: 1rem;
-            font-family: 'Lato', sans-serif;
+            padding: 30px;
+            font-size: 0.9rem;
             letter-spacing: 1px;
         }
 
         @media (max-width: 992px) {
-            .landing-hero h1 { font-size: 2.5rem; }
+            .landing-hero h1 { font-size: 2.8rem; }
             .landing-hero p { font-size: 1.2rem; }
             .feature-card {
-                border-radius: 20px; /* Moins rond sur mobile pour gagner de la place */
+                border-radius: 30px;
                 aspect-ratio: auto;
                 padding: 40px 20px;
             }
-        }
-        
-        /* Navbar */
-        .navbar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .navbar .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            color: white;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .btn-outline {
-            display: inline-block;
-            background: transparent;
-            color: white;
-            text-decoration: none;
-            padding: 10px 25px;
-            font-size: 1rem;
-            border-radius: 30px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-            border: 2px solid white;
-        }
-
-        .btn-outline:hover {
-            background: white;
-            color: #111;
+            .feature-card::before { display: none; }
+            .feature-card:hover { border-color: var(--primary); }
+            .navbar { padding: 15px 20px; }
         }
     </style>
 </head>
@@ -220,11 +273,11 @@
     <header class="landing-hero">
         <nav class="navbar">
             <a href="{% url 'presentation' %}" class="logo">I-Neklou</a>
-            <a href="{% url 'auth' %}" class="btn-outline">S'inscrire / Connexion</a>
+            <a href="{% url 'auth' %}" class="btn-outline">S'inscrire</a>
         </nav>
         
         <div class="landing-hero-content">
-            <h1>Bienvenue sur I-Neklou</h1>
+            <h1>Bienvenue sur <span>I-Neklou</span></h1>
             <p>La première plateforme dédiée à la découverte des trésors culinaires de la Tunisie. Trouvez, réservez et savourez.</p>
             <a href="{% url 'index' %}" class="btn-primary">Commencer l'aventure</a>
         </div>
@@ -251,7 +304,7 @@
     <section class="cta-section">
         <h2>Prêt à découvrir les meilleurs restaurants ?</h2>
         <p>Rejoignez des milliers de gourmets tunisiens dès aujourd'hui.</p>
-        <a href="{% url 'auth' %}" class="btn-primary" style="background: #111; color: white; border-color: #111;">Créer mon compte gratuitement</a>
+        <a href="{% url 'auth' %}" class="btn-primary" style="background: white; color: var(--secondary); box-shadow: 0 8px 25px rgba(0,0,0,0.3);">Créer mon compte gratuitement</a>
     </section>
 
     <footer class="footer">
