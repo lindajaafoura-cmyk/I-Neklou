@@ -1,0 +1,35 @@
+@startuml UC7a – A1 : Saisir un code valide (Diagramme de Séquence)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title A1 : Saisir un code de fidélité valide
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+U -> S : 1 : Saisir un code dans le formulaire
+U -> S : 2 : Valider le code
+S -> S : 3 : Vérifier la validité du code
+
+alt [E1 : Code invalide]
+    S --> U : 4 : Afficher "Code invalide. Veuillez réessayer."
+else [E2 : Code déjà utilisé]
+    S --> U : 5 : Afficher "Vous avez déjà utilisé ce code !"
+else [code valide et non utilisé]
+    S -> S : 6 : Ajouter les points correspondants
+    S -> S : 7 : Mettre à jour le niveau si nécessaire
+    S -> S : 8 : Enregistrer la transaction dans l'historique
+    S --> U : 9 : Afficher message de confirmation
+    S --> U : 10 : Mettre à jour l'affichage des points et du niveau
+end
+
+@enduml

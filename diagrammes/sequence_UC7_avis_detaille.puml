@@ -1,0 +1,40 @@
+@startuml UC7 – Donner un avis (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam sequenceBoxBorderColor #C48EA1
+skinparam sequenceBoxBackgroundColor #FDF0F5
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Donner un avis
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_Restaurant" as UI
+control "Controller" as C
+entity "Avis" as DB
+
+ref over U, UI, C, DB : (S'authentifier)
+ref over U, UI, C, DB : (Consulter les détails d'un restaurant)
+
+U -> UI : 1 : Saisir une note et un commentaire
+UI -> C : 2 : Envoyer les données (POST)
+
+C -> C : 3 : Vérifier les données
+
+alt [note invalide ou commentaire trop court]
+    C --> UI : 4 : Afficher un message d'erreur
+else [données valides]
+    C -> DB : 4 : Review.create()
+    C -> DB : 5 : restaurant.save()\n(mise à jour note moyenne)
+    C --> UI : 6 : Retourner nouvelle note
+    UI --> U : 7 : Afficher l'avis et la note mise à jour
+end
+
+@enduml

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I-Neklou - Découvrez la Gastronomie Tunisienne</title>
+    {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'user/styles.css' %}?v={% now 'U' %}">
+    <style>
+
+
+        .landing-hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .landing-hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .landing-hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            max-width: 800px;
+        }
+
+        .features-section {
+            padding: 80px 0;
+            background: var(--cream);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow-warm);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .cta-section {
+            padding: 100px 0;
+            text-align: center;
+            background: white;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <a href="{% url 'index' %}" class="logo">
+                    <span class="logo-text">I-Neklou</span>
+                </a>
+
+                <div class="auth-buttons">
+                    <a href="{% url 'auth' %}" class="btn btn-outline">Connexion</a>
+                    <a href="{% url 'auth' %}" class="btn btn-primary">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="landing-hero">
+        <div class="container">
+            <h1>Bienvenue sur I-Neklou</h1>
+            <p>La première plateforme dédiée à la découverte des trésors culinaires de la Tunisie. Trouvez, réservez et
+                savourez.</p>
+            <a href="{% url 'auth' %}" class="btn btn-primary" style="padding: 15px 40px; font-size: 1.2rem;">Commencer
+                l'aventure</a>
+        </div>
+    </header>
+
+    <section class="features-section">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 2.5rem;">Pourquoi choisir I-Neklou ?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Recherche Intelligente</h3>
+                    <p>Filtrez par ville, type de cuisine ou budget pour trouver exactement ce que vous cherchez.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Favoris & Avis</h3>
+                    <p>Enregistrez vos restaurants préférés et partagez vos expériences avec la communauté.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Programme de Fidélité</h3>
+                    <p>Gagnez des points à chaque visite et profitez de réductions exclusives dans nos restaurants
+                        partenaires.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>Prêt à découvrir les meilleurs restaurants ?</h2>
+            <p style="margin-bottom: 40px; font-size: 1.2rem;">Rejoignez des milliers de gourmets tunisiens dès
+                aujourd'hui.</p>
+            <a href="{% url 'auth' %}" class="btn btn-primary" style="padding: 15px 40px; font-size: 1.2rem;">Créer mon
+                compte gratuitement</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 I-Neklou. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

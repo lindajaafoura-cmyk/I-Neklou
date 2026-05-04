@@ -1,0 +1,42 @@
+@startuml UC6 – Réserver une table (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Réserver une table
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+ref over U, S : (Consulter les détails d'un restaurant)
+
+U -> S : 1 : Cliquer sur "Réserver"
+S --> U : 2 : Afficher le formulaire de réservation\n(avec créneaux horaires disponibles)
+
+U -> S : 3 : Remplir le formulaire\n(heure, nom, téléphone, demandes spéciales)
+S -> S : 4 : Vérifier les données
+
+alt [champ obligatoire vide (nom, téléphone ou heure)]
+    S --> U : 5 : Afficher message d'erreur
+else [champs remplis]
+    alt [format nom incorrect (chiffres ou trop court/long)]
+        S --> U : 6 : Afficher "Le nom doit contenir uniquement des lettres\n(2 à 50 caractères)"
+    else [format téléphone incorrect (pas 8 chiffres tunisiens)]
+        S --> U : 7 : Afficher "Numéro invalide.\nFormat tunisien attendu : 8 chiffres"
+    else [toutes les données sont valides]
+        S -> S : 8 : Enregistrer la réservation
+        S --> U : 9 : Afficher la fenêtre de confirmation\n(récapitulatif de la réservation)
+        S --> U : 10 : Redirection vers "Mon Compte"
+    end
+end
+
+@enduml

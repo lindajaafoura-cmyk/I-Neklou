@@ -1,0 +1,311 @@
+{% extends 'pages/admin-panel/base.html' %}
+{% load static %}
+
+{% block title %}Gestion des avis - Administration{% endblock %}
+
+{% block page_icon %}<i class="fas fa-star"></i>{% endblock %}
+{% block page_title %}Gestion des avis{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid #F0E5D8;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: #4A6B4D;
+    }
+
+    .stat-label {
+        font-size: 13px;
+        color: #A7B57A;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 5px;
+    }
+
+    .filters-section {
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+        margin-bottom: 30px;
+        border: 1px solid #F0E5D8;
+    }
+
+    .filter-group {
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        margin-right: 20px;
+    }
+
+    .filter-group label {
+        font-weight: 600;
+        color: #4A6B4D;
+        font-size: 14px;
+    }
+
+    .filter-group select,
+    .filter-group input {
+        padding: 8px 12px;
+        border: 1px solid #F0E5D8;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: #F9F5F0;
+        border-bottom: 2px solid #F0E5D8;
+    }
+
+    th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #4A6B4D;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #F0E5D8;
+        font-size: 14px;
+    }
+
+    tbody tr:hover {
+        background: #FFF9F0;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-pending {
+        background: #FFF8E1;
+        color: #F57C00;
+    }
+
+    .badge-approved {
+        background: #E8F5E9;
+        color: #2E7D32;
+    }
+
+    .badge-rejected {
+        background: #FFEBEE;
+        color: #C62828;
+    }
+
+    .badge-verified {
+        background: #E3F2FD;
+        color: #1976D2;
+    }
+
+    .rating-stars {
+        color: #FFB800;
+        font-size: 14px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-icon {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        border-radius: 8px;
+    }
+
+    .btn-icon.view {
+        background: #E3F2FD;
+        color: #1976D2;
+    }
+
+    .btn-icon.view:hover {
+        background: #1976D2;
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #A7B57A;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Statistiques -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.total }}</div>
+        <div class="stat-label">Total avis</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.pending }}</div>
+        <div class="stat-label">En attente</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.approved }}</div>
+        <div class="stat-label">Approuvés</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.rejected }}</div>
+        <div class="stat-label">Rejetés</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.avg_rating|floatformat:1 }}</div>
+        <div class="stat-label">Note moyenne</div>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="filters-section">
+    <form method="GET">
+        <div class="filter-group">
+            <label for="status">Statut :</label>
+            <select name="status" id="status">
+                <option value="">Tous</option>
+                <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>En attente</option>
+                <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Approuvé</option>
+                <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejeté</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="rating">Note :</label>
+            <select name="rating" id="rating">
+                <option value="">Toutes</option>
+                {% for i in "12345"|make_list %}
+                <option value="{{ i }}" {% if rating_filter == i %}selected{% endif %}>{{ i }} ★</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="search">Recherche :</label>
+            <input type="text" name="search" id="search" placeholder="Utilisateur, restaurant..." value="{{ search }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Filtrer</button>
+        {% if status_filter or rating_filter or search %}
+        <a href="{% url 'admin_reviews' %}" class="btn btn-outline">Réinitialiser</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Liste des avis -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">
+            <i class="fas fa-list"></i>
+            Liste des avis
+        </h2>
+    </div>
+
+    {% if reviews %}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Utilisateur</th>
+                    <th>Restaurant</th>
+                    <th>Note</th>
+                    <th>Avis</th>
+                    <th>Statut</th>
+                    <th>Vérifié</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in reviews %}
+                <tr>
+                    <td>
+                        <strong>{{ review.user.get_full_name|default:review.user.username }}</strong>
+                        <br>
+                        <small style="color: #A7B57A;">{{ review.user.email }}</small>
+                    </td>
+                    <td>{{ review.restaurant_name }}</td>
+                    <td>
+                        <span class="rating-stars">
+                            {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %} {% endfor %} </span>
+                    </td>
+                    <td>{{ review.comment|truncatechars:50 }}</td>
+                    <td>
+                        <span class="badge badge-{{ review.status }}">
+                            {% if review.status == 'pending' %}En attente
+                            {% elif review.status == 'approved' %}Approuvé
+                            {% elif review.status == 'rejected' %}Rejeté
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        {% if review.is_verified %}
+                        <span class="badge badge-verified">Vérifié</span>
+                        {% else %}
+                        <span class="badge" style="background: #F5F5F5; color: #999;">Non vérifié</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ review.created_at|date:"d/m/Y" }}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'admin_review_detail' review.id %}" class="btn-icon view"
+                                title="Voir détails">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-star"></i>
+        <p>Aucun avis trouvé</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

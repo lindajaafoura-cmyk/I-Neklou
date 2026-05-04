@@ -1,0 +1,33 @@
+@startuml UC3 – Rechercher un restaurant (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Rechercher un restaurant
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+
+U -> S : 1 : Accéder à la page d'accueil
+S --> U : 2 : Afficher la liste des restaurants
+
+U -> S : 3 : Saisir un mot-clé dans la barre de recherche
+S -> S : 4 : Filtrer les restaurants
+
+alt [aucun résultat]
+    S --> U : 5 : Afficher "Aucun restaurant trouvé"
+else [résultats trouvés]
+    S --> U : 5 : Afficher la liste filtrée
+end
+
+@enduml

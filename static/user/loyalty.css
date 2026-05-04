@@ -1,0 +1,530 @@
+/* ============================================================
+   FIDÉLITÉ — thème cohérent avec le reste du site utilisateur
+   ============================================================ */
+
+:root {
+    --basil:       #2D5A3B;
+    --basil-light: #3d734e;
+    --basil-dark:  #23472f;
+    --cream:       #F9F6F0;
+    --cream-dark:  #F0EBE0;
+    --dark:        #1C1C1C;
+    --gray:        #707070;
+    --terra:       #C96E4B;
+    --terra-light: #E89D7A;
+}
+
+/* ===== HERO ===== */
+.loyalty-hero {
+    background: linear-gradient(rgba(28,28,28,0.6), rgba(28,28,28,0.5)),
+                url('https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=1600&q=80') center/cover no-repeat;
+    padding: 80px 0 60px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.loyalty-hero-border {
+    height: 70px;
+    background: linear-gradient(transparent, var(--cream));
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 2;
+}
+
+.loyalty-hero .container {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+.loyalty-hero .container::before {
+    content: 'Programme de récompenses';
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 14px;
+}
+
+.loyalty-hero h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(38px, 6vw, 64px);
+    font-weight: 300;
+    line-height: 1.05;
+    color: white;
+    letter-spacing: -1px;
+    margin-bottom: 14px;
+    text-shadow: 2px 4px 12px rgba(0,0,0,0.3);
+}
+
+.loyalty-hero h1 em { font-style: italic; color: var(--terra-light); }
+
+.loyalty-hero p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    font-weight: 300;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+/* ===== CONTAINER ===== */
+.loyalty-container {
+    max-width: 1100px;
+    margin: 0 auto 80px;
+    padding: 0 20px;
+}
+
+/* ===== POINTS CARD ===== */
+.points-card {
+    background: white;
+    border: 1.5px solid var(--dark);
+    border-radius: 4px;
+    padding: 36px 40px;
+    margin-bottom: 36px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+}
+
+.points-badge {
+    background: var(--dark);
+    color: white;
+    padding: 7px 16px;
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.points-badge i { color: var(--terra); }
+
+.current-points {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 12px;
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+.current-points span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    color: var(--basil);
+    font-weight: 600;
+    margin-left: 6px;
+    letter-spacing: 0;
+}
+
+.progress-bar {
+    height: 4px;
+    background: var(--cream-dark);
+    margin: 20px 0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--terra);
+    border-radius: 2px;
+}
+
+.tier-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--gray);
+    font-weight: 500;
+}
+
+.tier-info strong { color: var(--dark); font-weight: 700; }
+
+.rewards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.reward-item {
+    background: var(--cream);
+    border: 1px solid var(--cream-dark);
+    border-radius: 4px;
+    padding: 16px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+
+.reward-item:hover { border-color: var(--basil); background: white; }
+
+.reward-icon { font-size: 20px; color: var(--terra); margin-bottom: 8px; }
+.reward-value { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; color: var(--basil); margin-bottom: 4px; }
+.reward-desc { font-size: 12px; color: var(--gray); }
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--dark);
+    margin: 50px 0 24px;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--cream-dark);
+}
+
+.section-title i { font-size: 20px; color: var(--basil); }
+
+/* ===== COLLECT SECTION ===== */
+.collect-section {
+    background: var(--dark);
+    color: white;
+    padding: 40px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.collect-section .section-title {
+    color: white;
+    margin-top: 0;
+    justify-content: center;
+    border-bottom-color: rgba(255,255,255,0.1);
+}
+.collect-section .section-title i { color: var(--terra); }
+.collect-section p { color: rgba(255,255,255,0.6); font-size: 14px; }
+
+.code-input-group {
+    display: flex;
+    max-width: 500px;
+    margin: 24px auto 0;
+    gap: 8px;
+}
+
+.code-input-group input {
+    flex: 1;
+    padding: 13px 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.06);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.code-input-group input::placeholder { color: rgba(255,255,255,0.35); }
+.code-input-group input:focus { outline: none; background: rgba(255,255,255,0.1); border-color: var(--terra); }
+
+.code-input-group button {
+    background: var(--terra);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 13px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.code-input-group button:hover { background: #a85a3a; }
+
+.demo-codes {
+    margin-top: 18px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+}
+
+.demo-codes code {
+    background: rgba(255,255,255,0.08);
+    padding: 3px 8px;
+    margin: 0 3px;
+    font-size: 12px;
+    border-radius: 2px;
+    color: var(--terra-light);
+    font-weight: 600;
+}
+
+/* ===== TIERS ===== */
+.tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.tier-card {
+    background: white;
+    padding: 28px 18px;
+    text-align: center;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 4px;
+    transition: border-color 0.2s;
+    position: relative;
+}
+
+.tier-card:hover { border-color: var(--dark); }
+
+.tier-card.current {
+    border: 1.5px solid var(--terra);
+    background: #FFFAF7;
+}
+
+.tier-card.current::before {
+    content: 'VOTRE NIVEAU';
+    position: absolute;
+    top: -10px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--terra);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.tier-icon { font-size: 32px; margin-bottom: 14px; }
+.tier-icon.bronze i   { color: #CD7F32; }
+.tier-icon.silver i   { color: #A8A9AD; }
+.tier-icon.gold i     { color: #D4AF37; }
+.tier-icon.platinum i { color: #8A2BE2; }
+
+.tier-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 4px;
+    color: var(--dark);
+}
+
+.tier-points { font-size: 12px; color: var(--basil); font-weight: 600; margin-bottom: 16px; }
+
+.tier-benefits { list-style: none; text-align: left; font-size: 12px; }
+.tier-benefits li {
+    padding: 7px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--cream-dark);
+    color: var(--dark);
+    font-weight: 400;
+}
+.tier-benefits li:last-child { border-bottom: none; }
+.tier-benefits li i { color: var(--terra); font-size: 11px; }
+
+/* ===== COUPONS ===== */
+.coupons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.coupon-card {
+    background: white;
+    padding: 24px;
+    border-radius: 4px;
+    border: 1.5px dashed var(--cream-dark);
+    transition: border-color 0.2s;
+}
+
+.coupon-card:hover { border-color: var(--terra); }
+
+.coupon-icon { font-size: 22px; color: var(--terra); margin-bottom: 10px; }
+
+.coupon-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+}
+
+.coupon-desc { font-size: 13px; color: var(--gray); margin-bottom: 8px; }
+
+.coupon-cost {
+    font-size: 11px;
+    color: var(--basil);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+}
+
+.coupon-code {
+    background: var(--dark);
+    padding: 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: white;
+    border-radius: 2px;
+    font-family: monospace;
+}
+
+/* ===== HISTORY ===== */
+.history-section {
+    background: white;
+    border: 1.5px solid var(--dark);
+    border-radius: 4px;
+    padding: 28px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--cream-dark);
+}
+
+.history-item:last-child { border-bottom: none; }
+
+.history-left { display: flex; align-items: center; gap: 14px; }
+
+.history-icon {
+    width: 38px; height: 38px;
+    background: var(--cream);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--basil);
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.history-details h4 { font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 3px; }
+.history-details p  { font-size: 11px; color: var(--gray); }
+
+.history-points {
+    font-weight: 700;
+    color: var(--gray);
+    font-size: 14px;
+    background: var(--cream);
+    padding: 5px 12px;
+    border-radius: 2px;
+}
+
+.history-points.positive { color: white; background: var(--basil); }
+
+.history-empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--gray);
+    font-size: 14px;
+}
+
+/* ===== HOW IT WORKS ===== */
+.how-it-works { margin-top: 60px; }
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.step {
+    background: white;
+    padding: 32px 24px;
+    text-align: center;
+    border-radius: 4px;
+    border: 1.5px solid var(--cream-dark);
+    transition: border-color 0.2s;
+}
+
+.step:hover { border-color: var(--dark); }
+
+.step-icon {
+    width: 56px; height: 56px;
+    background: var(--cream);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    color: var(--terra);
+    margin: 0 auto 16px;
+}
+
+.step h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: var(--dark);
+}
+
+.step p { font-size: 13px; color: var(--gray); }
+
+/* ===== COUPONS EMPTY ===== */
+.coupons-empty {
+    text-align: center;
+    padding: 50px 20px;
+    border: 1.5px dashed var(--cream-dark);
+    border-radius: 4px;
+    background: white;
+}
+
+.coupons-empty i { font-size: 36px; color: var(--terra); margin-bottom: 14px; opacity: 0.4; display: block; }
+.coupons-empty p { font-size: 16px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+.coupons-empty span { font-size: 13px; color: var(--gray); }
+
+/* ===== MESSAGES ===== */
+.messages-container {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    background: var(--basil);
+    color: white;
+    padding: 13px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ===== COUPONS INTRO ===== */
+.coupons-intro {
+    font-size: 14px;
+    color: var(--gray);
+    margin-bottom: 20px;
+}
+
+.coupons-intro strong { color: var(--dark); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .points-card  { grid-template-columns: 1fr; }
+    .tiers-grid   { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .coupons-grid { grid-template-columns: 1fr; }
+    .steps-grid   { grid-template-columns: 1fr; gap: 14px; }
+    .code-input-group { flex-direction: column; }
+}

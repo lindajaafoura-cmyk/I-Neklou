@@ -1,0 +1,31 @@
+@startuml UC10-E2 – Consulter mes réservations (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Consulter mes réservations
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+ref over U, S : (Consulter l'espace compte)
+
+U -> S : 1 : Consulter la section "Mes Réservations"
+S -> S : 2 : Récupérer les réservations de l'utilisateur
+
+alt [aucune réservation]
+    S --> U : 3 : Afficher "Aucune réservation trouvée"
+else [réservations existantes]
+    S --> U : 3 : Afficher la liste des réservations
+end
+
+@enduml

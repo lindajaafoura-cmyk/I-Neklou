@@ -1,0 +1,50 @@
+@startuml UC4 – Filtrer les restaurants (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Filtrer les restaurants\n(Diagramme de Séquence Détaillé)
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_Accueil" as UI
+control "Controller" as C
+entity "Restaurant" as DB
+
+U -> UI : 1 : Accéder à la page d'accueil()
+UI -> C : 2 : GET /
+C -> DB : 3 : Récupérer tous les restaurants\n(status = 'approved')
+DB --> C : 4 : Retourner la liste des restaurants
+C --> UI : 5 : Retourner index.html\n(liste + options de filtrage)
+UI --> U : 6 : Afficher la liste et le panneau de filtres
+
+U -> UI : 7 : Sélectionner un ou plusieurs critères\n(ville / cuisine / budget / note)
+UI -> UI : 8 : filterRestaurants()\n(traitement côté client)
+
+note over UI
+  Le filtrage s'effectue en JavaScript
+  sur les cartes HTML déjà affichées.
+  Les critères sont combinables.
+  Aucune requête serveur n'est envoyée.
+end note
+
+UI -> UI : 9 : Parcourir chaque carte\net appliquer les critères
+
+alt [aucune carte ne correspond]
+    UI --> U : 10 : Afficher "Aucun restaurant trouvé\npour ces critères"
+else [des cartes correspondent]
+    UI --> U : 10 : Afficher les cartes filtrées\net mettre à jour le compteur
+end
+
+U -> UI : 11 : Cliquer sur "Réinitialiser les filtres"
+UI -> UI : 12 : resetFilters()\n(réafficher toutes les cartes)
+UI --> U : 13 : Afficher à nouveau tous les restaurants
+
+@enduml

@@ -1,0 +1,41 @@
+@startuml UC2 – S'authentifier (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam sequenceBoxBorderColor #C48EA1
+skinparam sequenceBoxBackgroundColor #FDF0F5
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction S'authentifier
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_Connexion" as UI
+control "Controller" as C
+entity "Utilisateur" as DB
+
+U -> UI : 1 : Saisir email et mot de passe
+UI -> C : 2 : Envoyer les données
+
+C -> DB : 3 : filter(email) dans MongoUser
+DB --> C : 4 : Retourner le résultat
+
+alt [email introuvable]
+    C --> UI : 5 : Afficher "Aucun compte trouvé"
+else [email trouvé]
+    C -> C : 5 : check_password()
+    alt [mot de passe incorrect]
+        C --> UI : 6 : Afficher "Mot de passe incorrect"
+    else [mot de passe correct]
+        C -> C : 6 : login()
+        C --> UI : 7 : Redirection selon le rôle\n(utilisateur → accueil)
+    end
+end
+
+@enduml

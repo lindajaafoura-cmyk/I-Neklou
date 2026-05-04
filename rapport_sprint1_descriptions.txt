@@ -1,0 +1,600 @@
+================================================================
+        DINETUNIS — SPRINT 1 : ESPACE UTILISATEUR
+        Descriptions Textuelles des Cas d'Utilisation
+================================================================
+
+
+================================================================
+UC1 – S'INSCRIRE EN TANT QU'UTILISATEUR
+================================================================
+
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    S'inscrire en tant qu'utilisateur
+Acteur principal     Utilisateur non connecté
+Pré-conditions       L'utilisateur n'a pas encore de compte
+Post-conditions      Le compte est créé et l'utilisateur est connecté
+
+Enchaînement nominal :
+1. L'utilisateur accède à la page d'authentification.
+2. Il sélectionne l'onglet "Inscription".
+3. Il saisit son nom complet, son adresse e-mail et son mot de passe.
+4. Il valide le formulaire.
+5. Le système confirme la création du compte.
+6. L'utilisateur est automatiquement connecté et redirigé vers la page d'accueil.
+
+Enchaînements d'exception :
+E1 : L'adresse e-mail est déjà associée à un compte existant
+     → Le système affiche un message d'erreur et invite l'utilisateur
+       à utiliser une autre adresse ou à se connecter.
+
+
+================================================================
+UC2 – S'AUTHENTIFIER EN TANT QUE CLIENT
+================================================================
+
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    S'authentifier en tant que client
+Acteur principal     Utilisateur inscrit
+Pré-conditions       L'utilisateur possède un compte actif
+Post-conditions      L'utilisateur est connecté et accède à son espace personnel
+
+Enchaînement nominal :
+1. L'utilisateur accède à la page de connexion.
+2. Il saisit son adresse e-mail et son mot de passe.
+3. Il clique sur "Se connecter".
+4. Le système vérifie les identifiants.
+5. L'utilisateur est redirigé vers la page d'accueil.
+
+Enchaînements d'exception :
+E1 : Mot de passe incorrect
+     → Le système affiche "Mot de passe incorrect" et invite à réessayer.
+E2 : Adresse e-mail inconnue
+     → Le système affiche "Aucun compte trouvé avec cet email".
+
+
+================================================================
+UC3 – RECHERCHER UN RESTAURANT
+================================================================
+
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Rechercher un restaurant
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté
+Post-conditions      Une liste de restaurants correspondant à la recherche est affichée
+
+Enchaînement nominal :
+1. L'utilisateur accède à la page d'accueil.
+2. Le système affiche la liste des restaurants disponibles avec
+   leur nom, type de cuisine, ville, note et éventuelles promotions.
+3. L'utilisateur saisit un mot-clé dans la barre de recherche.
+4. Le système filtre et affiche en temps réel les restaurants
+   dont le nom ou la cuisine correspond au terme saisi.
+
+Enchaînements d'exception :
+E1 : Aucun restaurant ne correspond à la recherche
+     → Le système affiche un message indiquant qu'aucun résultat n'a été trouvé.
+
+
+================================================================
+UC4 – FILTRER LES RESTAURANTS
+================================================================
+
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Filtrer les restaurants
+Acteur principal     Utilisateur connecté
+Pré-conditions       La liste des restaurants est affichée
+Post-conditions      La liste est mise à jour selon les critères sélectionnés
+
+Enchaînement nominal :
+1. L'utilisateur accède à la page d'accueil.
+2. Il sélectionne un ou plusieurs critères de filtrage disponibles.
+3. Le système met à jour instantanément la liste des restaurants affichés.
+
+Enchaînements d'exception :
+E1 : Aucun restaurant ne correspond aux filtres appliqués
+     → Le système affiche un message indiquant qu'aucun résultat ne correspond.
+
+────────────────────────────────────────
+UC4a – Filtrer par budget
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Filtrer par budget
+Acteur principal     Utilisateur connecté
+Pré-conditions       La liste des restaurants est affichée
+Post-conditions      Seuls les restaurants correspondant à la gamme de prix choisie sont affichés
+
+Enchaînement nominal :
+1. L'utilisateur sélectionne une gamme de prix ($, $$, $$$).
+2. Le système filtre et affiche uniquement les restaurants
+   dont la gamme de prix correspond à la sélection.
+
+────────────────────────────────────────
+UC4b – Filtrer par ville
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Filtrer par ville
+Acteur principal     Utilisateur connecté
+Pré-conditions       La liste des restaurants est affichée
+Post-conditions      Seuls les restaurants de la ville sélectionnée sont affichés
+
+Enchaînement nominal :
+1. L'utilisateur sélectionne ou saisit une ville dans le filtre.
+2. Le système affiche uniquement les restaurants situés dans cette ville.
+
+────────────────────────────────────────
+UC4c – Filtrer par type de cuisine
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Filtrer par type de cuisine
+Acteur principal     Utilisateur connecté
+Pré-conditions       La liste des restaurants est affichée
+Post-conditions      Seuls les restaurants proposant le type de cuisine choisi sont affichés
+
+Enchaînement nominal :
+1. L'utilisateur sélectionne un type de cuisine (ex. Tunisienne, Italienne, Japonaise…).
+2. Le système affiche uniquement les restaurants correspondant à ce type.
+
+────────────────────────────────────────
+UC4d – Filtrer par note
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Filtrer par note
+Acteur principal     Utilisateur connecté
+Pré-conditions       La liste des restaurants est affichée
+Post-conditions      Seuls les restaurants ayant une note supérieure ou égale au seuil choisi sont affichés
+
+Enchaînement nominal :
+1. L'utilisateur sélectionne une note minimale (ex. 3 étoiles et plus).
+2. Le système affiche uniquement les restaurants dont la note
+   est supérieure ou égale à la valeur choisie.
+
+
+================================================================
+UC5 – CONSULTER LES DÉTAILS D'UN RESTAURANT
+================================================================
+
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Consulter les détails d'un restaurant
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté
+Post-conditions      La fiche complète du restaurant est affichée
+
+Enchaînement nominal :
+1. L'utilisateur clique sur un restaurant depuis la liste.
+2. Le système affiche la fiche complète du restaurant.
+3. L'utilisateur peut naviguer entre les différentes sections :
+   informations, menu, avis et promotions.
+
+────────────────────────────────────────
+UC5a – Voir les informations du restaurant
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Voir les informations du restaurant
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur consulte la fiche d'un restaurant
+Post-conditions      Les informations générales du restaurant sont affichées
+
+Enchaînement nominal :
+1. Le système affiche le nom, la description, l'adresse, le téléphone,
+   les horaires d'ouverture, le type de cuisine et la gamme de prix.
+2. L'utilisateur peut consulter ces informations librement.
+
+────────────────────────────────────────
+UC5b – Voir le menu du restaurant
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Voir le menu du restaurant
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur consulte la fiche d'un restaurant
+Post-conditions      Le menu complet du restaurant est affiché
+
+Enchaînement nominal :
+1. L'utilisateur accède à l'onglet "Menu".
+2. Le système affiche les plats regroupés par catégorie,
+   avec le nom, la description, le prix et une photo pour chaque plat.
+
+Enchaînements d'exception :
+E1 : Le restaurant n'a pas encore renseigné son menu
+     → Le système affiche un message indiquant que le menu n'est pas disponible.
+
+────────────────────────────────────────
+UC5c – Voir les avis des utilisateurs
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Voir les avis des utilisateurs
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur consulte la fiche d'un restaurant
+Post-conditions      Les avis validés du restaurant sont affichés
+
+Enchaînement nominal :
+1. L'utilisateur accède à l'onglet "Avis".
+2. Le système affiche la liste des avis approuvés avec le nom
+   de l'auteur, la note en étoiles et le commentaire.
+3. La note moyenne globale du restaurant est affichée en haut de la section.
+
+Enchaînements d'exception :
+E1 : Aucun avis n'a encore été publié pour ce restaurant
+     → Le système affiche un message invitant l'utilisateur à être le premier à laisser un avis.
+
+
+================================================================
+UC6 – RÉSERVER UNE TABLE
+================================================================
+
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Réserver une table
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et consulte la fiche d'un restaurant
+Post-conditions      La réservation est enregistrée avec le statut "En attente"
+
+Enchaînement nominal :
+1. L'utilisateur clique sur le bouton "Réserver" sur la fiche du restaurant.
+2. Le système affiche le formulaire de réservation.
+3. L'utilisateur choisit la date, l'heure et le nombre de couverts.
+4. L'utilisateur peut ajouter une demande spéciale (allergies, préférences, etc.).
+5. L'utilisateur valide la réservation.
+6. Le système enregistre la réservation.
+7. Le système affiche un message de confirmation.
+8. L'utilisateur est redirigé vers son espace compte où la réservation apparaît.
+
+Enchaînements d'exception :
+E1 : Date ou heure non disponible → message d'erreur.
+E2 : Nombre de couverts invalide (0 ou trop élevé) → message d'erreur.
+
+
+================================================================
+UC7 – DONNER UN AVIS
+================================================================
+
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Donner un avis
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et consulte la fiche d'un restaurant
+Post-conditions      L'avis est enregistré en attente de validation
+
+Enchaînement nominal :
+1. L'utilisateur accède à l'onglet "Avis" du restaurant.
+2. L'utilisateur clique sur le bouton "Donner mon avis".
+3. Le système affiche un formulaire de notation.
+4. L'utilisateur sélectionne une note (1 à 5 étoiles).
+5. L'utilisateur rédige un commentaire.
+6. L'utilisateur valide son avis.
+7. Le système enregistre l'avis.
+8. Le système affiche le nouvel avis dans la liste.
+9. Le système met à jour la note moyenne du restaurant.
+
+Enchaînements d'exception :
+E1 : Commentaire vide → message d'erreur, retour à la saisie.
+E2 : Note non sélectionnée → message d'erreur.
+
+
+================================================================
+UC8 – GÉRER LES FAVORIS
+================================================================
+
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Gérer les favoris
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté
+Post-conditions      La liste des favoris est mise à jour
+
+Enchaînement nominal :
+1. L'utilisateur accède à la page "Mes Favoris".
+2. Le système affiche la liste des restaurants enregistrés en favoris
+   avec leur nom, image, type de cuisine, note et localisation.
+
+────────────────────────────────────────
+UC8a – Mettre en favoris
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Mettre en favoris
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur consulte la liste ou la fiche d'un restaurant
+Post-conditions      Le restaurant est ajouté à la liste des favoris de l'utilisateur
+
+Enchaînement nominal :
+1. L'utilisateur clique sur l'icône cœur d'un restaurant.
+2. Le système ajoute le restaurant aux favoris de l'utilisateur.
+3. L'icône passe à l'état "actif" pour indiquer que le restaurant est en favori.
+
+────────────────────────────────────────
+UC8b – Consulter les favoris
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Consulter les favoris
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté
+Post-conditions      La liste des restaurants favoris est affichée
+
+Enchaînement nominal :
+1. L'utilisateur accède à la page "Mes Favoris".
+2. Le système affiche tous les restaurants enregistrés en favoris
+   avec leurs informations principales.
+3. L'utilisateur peut cliquer sur un favori pour accéder à sa fiche.
+
+Enchaînements d'exception :
+E1 : L'utilisateur n'a aucun favori enregistré
+     → Le système affiche un message l'invitant à explorer les restaurants.
+
+────────────────────────────────────────
+UC8c – Retirer des favoris
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Retirer des favoris
+Acteur principal     Utilisateur connecté
+Pré-conditions       Le restaurant est déjà dans la liste des favoris
+Post-conditions      Le restaurant est retiré de la liste des favoris
+
+Enchaînement nominal :
+1. L'utilisateur clique à nouveau sur l'icône cœur d'un restaurant
+   déjà en favori (depuis la liste ou la fiche du restaurant).
+2. Le système retire le restaurant des favoris.
+3. L'icône repasse à l'état "inactif".
+
+
+================================================================
+UC9 – GÉRER LA FIDÉLITÉ
+================================================================
+
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Gérer la fidélité
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté
+Post-conditions      Les points et le niveau de fidélité sont affichés
+
+Enchaînement nominal :
+1. L'utilisateur accède à la page "Fidélité".
+2. Le système affiche le nombre de points accumulés.
+3. Le système affiche le niveau actuel (Ekoul, Ekoul Kbir, Makhmekh, Makhmekh Kbir).
+4. Le système affiche une barre de progression vers le niveau suivant.
+5. Le système affiche l'historique des transactions (points gagnés ou utilisés).
+
+────────────────────────────────────────
+UC9a – Voir les points fidélité
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Voir les points fidélité
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et accède à la page Fidélité
+Post-conditions      Le solde de points de l'utilisateur est affiché
+
+Enchaînement nominal :
+1. L'utilisateur accède à la page "Fidélité".
+2. Le système affiche le solde de points actuels ainsi que
+   le total de points cumulés depuis l'inscription.
+
+────────────────────────────────────────
+UC9b – Voir le niveau fidélité
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Voir le niveau fidélité
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et accède à la page Fidélité
+Post-conditions      Le niveau actuel et la progression vers le niveau suivant sont affichés
+
+Enchaînement nominal :
+1. Le système affiche le niveau actuel de l'utilisateur parmi :
+   Ekoul → Ekoul Kbir → Makhmekh → Makhmekh Kbir.
+2. Le système affiche une barre de progression indiquant
+   le nombre de points restants pour atteindre le niveau suivant.
+
+────────────────────────────────────────
+UC9c – Voir l'historique fidélité
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Voir l'historique fidélité
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et accède à la page Fidélité
+Post-conditions      L'historique des transactions de points est affiché
+
+Enchaînement nominal :
+1. L'utilisateur consulte la section historique de la page Fidélité.
+2. Le système affiche la liste des transactions triées par date,
+   avec pour chaque entrée : la description, le nombre de points
+   gagnés ou utilisés et la date.
+
+Enchaînements d'exception :
+E1 : Aucune transaction enregistrée
+     → Le système affiche un message indiquant que l'historique est vide.
+
+────────────────────────────────────────
+UC9d – Voir mes coupons
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Voir mes coupons
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et possède suffisamment de points
+Post-conditions      Les coupons disponibles sont affichés selon le solde de points
+
+Enchaînement nominal :
+1. Le système affiche les coupons auxquels l'utilisateur a droit
+   en fonction de son solde de points :
+   - 100 pts → Réduction de 10 DT sur la prochaine addition
+   - 250 pts → Une entrée offerte lors de la prochaine visite
+   - 500 pts → Un plat principal offert au choix
+   - 1000 pts → Menu dégustation complet pour 2 personnes
+2. Chaque coupon affiche son code, sa valeur et sa description.
+
+Enchaînements d'exception :
+E1 : L'utilisateur n'a pas encore assez de points pour débloquer un coupon
+     → Le système affiche un message l'encourageant à accumuler des points.
+
+────────────────────────────────────────
+UC9e – Insérer un code fidélité
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Insérer un code fidélité
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et accède à la page Fidélité
+Post-conditions      Les points correspondants au code sont ajoutés au solde de l'utilisateur
+
+Enchaînement nominal :
+1. L'utilisateur saisit un code promotionnel dans le champ prévu à cet effet.
+2. L'utilisateur clique sur "Valider le code".
+3. Le système vérifie la validité du code.
+4. Si le code est valide, le système ajoute les points correspondants,
+   met à jour le niveau si nécessaire et affiche un message de succès.
+
+Enchaînements d'exception :
+E1 : Le code est invalide
+     → Le système affiche "Code invalide. Veuillez réessayer."
+E2 : Le code a déjà été utilisé par cet utilisateur
+     → Le système affiche "Vous avez déjà utilisé ce code !"
+
+
+================================================================
+UC10 – GÉRER L'ESPACE COMPTE
+================================================================
+
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Gérer l'espace compte
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté
+Post-conditions      Les informations du compte sont consultées ou modifiées
+
+Enchaînement nominal :
+1. L'utilisateur accède à la page "Mon Compte".
+2. Le système affiche ses informations personnelles et ses réservations.
+
+────────────────────────────────────────
+UC10a – Changer les informations personnelles
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Changer les informations personnelles
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et accède à son espace compte
+Post-conditions      Les informations personnelles sont mises à jour
+
+Enchaînement nominal :
+1. L'utilisateur clique sur "Modifier mon profil".
+2. Le système affiche un formulaire pré-rempli avec ses informations actuelles.
+3. L'utilisateur modifie son prénom, nom ou adresse e-mail.
+4. L'utilisateur valide les modifications.
+5. Le système enregistre les changements et affiche
+   un message de confirmation : "Profil mis à jour avec succès !".
+
+Enchaînements d'exception :
+E1 : L'adresse e-mail saisie est déjà utilisée par un autre compte
+     → Le système affiche un message d'erreur.
+
+────────────────────────────────────────
+UC10b – Consulter mes réservations
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Consulter mes réservations
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et accède à son espace compte
+Post-conditions      La liste des réservations de l'utilisateur est affichée
+
+Enchaînement nominal :
+1. L'utilisateur accède à la section "Mes Réservations" de son compte.
+2. Le système affiche la liste de toutes ses réservations triées
+   par date, avec pour chacune : le nom du restaurant, la date,
+   l'heure, le nombre de couverts et le statut.
+
+Enchaînements d'exception :
+E1 : L'utilisateur n'a aucune réservation
+     → Le système affiche un message l'invitant à réserver un restaurant.
+
+────────────────────────────────────────
+UC10c – Consulter le statut de mes réservations
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Consulter le statut de mes réservations
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur consulte la liste de ses réservations
+Post-conditions      Le statut de chaque réservation est clairement affiché
+
+Enchaînement nominal :
+1. Pour chaque réservation, le système affiche son statut avec
+   un code couleur :
+   - Orange  → En attente de confirmation
+   - Vert    → Confirmée par le restaurant
+   - Rouge   → Annulée
+   - Gris    → Terminée
+
+────────────────────────────────────────
+UC10d – Changer mon mot de passe
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Changer mon mot de passe
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et accède à son espace compte
+Post-conditions      Le mot de passe est mis à jour
+
+Enchaînement nominal :
+1. L'utilisateur accède à la section "Sécurité" de son compte.
+2. Il saisit son mot de passe actuel, puis le nouveau mot de passe
+   et sa confirmation.
+3. Il valide le changement.
+4. Le système vérifie que l'ancien mot de passe est correct.
+5. Le système enregistre le nouveau mot de passe et affiche
+   un message de confirmation.
+
+Enchaînements d'exception :
+E1 : L'ancien mot de passe est incorrect
+     → Le système affiche un message d'erreur.
+E2 : Le nouveau mot de passe et sa confirmation ne correspondent pas
+     → Le système affiche un message d'erreur.
+
+────────────────────────────────────────
+UC10e – Supprimer mon compte
+────────────────────────────────────────
+Élément              Description
+─────────────────────────────────────────────────────────────
+Cas d'utilisation    Supprimer mon compte
+Acteur principal     Utilisateur connecté
+Pré-conditions       L'utilisateur est connecté et accède à son espace compte
+Post-conditions      Le compte et toutes les données associées sont supprimés
+
+Enchaînement nominal :
+1. L'utilisateur clique sur "Supprimer mon compte".
+2. Le système affiche une demande de confirmation.
+3. L'utilisateur confirme la suppression.
+4. Le système supprime le compte et toutes les données associées
+   (réservations, favoris, points de fidélité, avis).
+5. L'utilisateur est déconnecté et redirigé vers la page d'accueil.
+
+Enchaînements d'exception :
+E1 : L'utilisateur annule la suppression
+     → Le système reste sur la page compte sans effectuer de modification.
+
+
+================================================================
+FIN DU DOCUMENT
+================================================================
+Projet   : DineTunis
+Sprint   : 1 — Espace Utilisateur
+Stack    : Django + MongoDB
+Auteur   : [Votre nom]
+Date     : Avril 2026
+================================================================

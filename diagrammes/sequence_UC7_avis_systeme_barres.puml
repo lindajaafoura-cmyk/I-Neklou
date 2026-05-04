@@ -1,0 +1,61 @@
+@startuml UC7 – Donner un avis (Diagramme de Séquence Système avec Barres)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Donner un avis
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+' ============================================
+' PRÉ-CONDITIONS (Barres séparées)
+' ============================================
+|||
+ref over U, S : (S'authentifier)
+|||
+ref over U, S : (Consulter les détails d'un restaurant)
+|||
+
+' ============================================
+' ENCHAÎNEMENT NOMINAL (Barres séparées)
+' ============================================
+|||
+U -> S : 1 : Accéder à la partie "Avis" de la page détails du restaurant
+S --> U : 2 : Afficher les avis existants et le formulaire
+|||
+U -> S : 3 : Sélectionner une note (1 à 5 étoiles)
+|||
+U -> S : 4 : Rédiger un commentaire
+|||
+U -> S : 5 : Valider son avis
+|||
+S -> S : 6 : Vérifier les données
+|||
+S -> S : 7 : Enregistrer l'avis
+|||
+S --> U : 8 : Afficher le nouvel avis dans la liste
+|||
+S -> S : 9 : Mettre à jour la note moyenne du restaurant
+|||
+
+' ============================================
+' ENCHAÎNEMENTS D'EXCEPTION (Barres séparées)
+' ============================================
+|||
+alt [E1 : Commentaire vide ou inférieur à 5 caractères]
+    S --> U : E1 : Message d'erreur, retour à la saisie
+else [E2 : Note non sélectionnée]
+    S --> U : E2 : Message d'erreur
+end
+|||
+
+@enduml

@@ -1,0 +1,152 @@
+{% extends 'pages/admin-panel/base.html' %}
+{% load static %}
+
+{% block title %}Détail Restaurant - Administration{% endblock %}
+
+{% block page_icon %}<i class="fas fa-utensils"></i>{% endblock %}
+{% block page_title %}Détail du restaurant{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'admin/admin_restaurant_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="restaurant-detail-container">
+    <!-- Header de présentation -->
+    <header class="restaurant-header">
+        <h1 id="restaurant-name">Chargement...</h1>
+        <div class="meta">
+            <span><i class="fas fa-map-marker-alt"></i> <span id="restaurant-location"></span></span>
+            <span><i class="fas fa-star"></i> <span id="restaurant-rating"></span>/5</span>
+        </div>
+    </header>
+
+    <div class="restaurant-content">
+        <!-- Colonne de Gauche : Infos et Actions -->
+        <aside class="restaurant-sidebar">
+            <div class="restaurant-image-container">
+                <img id="restaurant-image" src="" alt="Photo du restaurant" class="restaurant-image"
+                    style="display: none;">
+                <div id="restaurant-image-placeholder"
+                    style="color: #999; font-style: italic; background: #eee; height: 200px; display: flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
+                    Aucune donnée disponible
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Statut opérationnel</span>
+                <span id="restaurant-status" class="status-badge">...</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Paiement Inscription (50 DT)</span>
+                <span id="restaurant-payment" class="status-badge">...</span>
+                <div id="payment-actions" style="margin-top: 10px;">
+                    <button id="btn-pay-link" class="btn-action"
+                        style="background: #E3F2FD; color: #1976D2; border: 1px solid #1976D2;"
+                        onclick="sendPaymentLink()">
+                        <i class="fas fa-paper-plane"></i> Envoyer lien de paiement
+                    </button>
+                    <p id="payment-date" style="font-size: 11px; margin-top: 5px; color: #666;"></p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Coordonnées</span>
+                <div class="info-value"><i class="fas fa-phone"></i> <span id="restaurant-phone"></span></div>
+                <div class="info-value"><i class="fas fa-envelope"></i> <span id="restaurant-email"></span></div>
+                <div class="info-value"><i class="fas fa-map-marker-alt"></i> <span id="restaurant-address"></span>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Type de cuisine & Budget</span>
+                <div class="info-value" id="restaurant-cuisine"></div>
+                <div class="info-value" id="restaurant-price"></div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="btn-approve" class="btn-action btn-approve" onclick="updateRestaurantStatus('approved')"
+                    disabled>
+                    <i class="fas fa-check"></i> Approuver le restaurant
+                </button>
+                <button class="btn-action btn-reject" onclick="updateRestaurantStatus('rejected')">
+                    <i class="fas fa-times"></i> Rejeter
+                </button>
+            </div>
+            <button class="btn-action btn-suspend" style="width: 100%; margin-top: 10px;"
+                onclick="updateRestaurantStatus('suspended')">
+                <i class="fas fa-ban"></i> Suspendre le compte
+            </button>
+        </aside>
+
+        <!-- Colonne de Droite : Détails, Menu et Chat -->
+        <section class="restaurant-details-main">
+            <div class="info-item">
+                <span class="info-label">À propos du restaurant</span>
+                <p id="restaurant-description" class="info-value" style="font-style: italic; color: #555;"></p>
+            </div>
+
+            <!-- Menu -->
+            <div class="menu-section">
+                <h3><i class="fas fa-utensils"></i> Menu Proposé</h3>
+                <div id="restaurant-menu">
+                    <p style="color: #999; font-style: italic;">Aucune donnée disponible</p>
+                </div>
+            </div>
+
+            <!-- Avis -->
+            <div class="menu-section">
+                <h3><i class="fas fa-comments"></i> Avis Clients</h3>
+                <div id="restaurant-reviews">
+                    <p style="color: #999; font-style: italic;">Aucune donnée disponible</p>
+                </div>
+            </div>
+
+            <!-- Chat de Support / Communication Admin -->
+            <div class="menu-section chat-communication-section">
+                <h3><i class="fas fa-paper-plane"></i> Espace de communication privé</h3>
+                <p class="chat-communication-subtitle">
+                    Discutez en direct avec le propriétaire du restaurant. Cet historique est sauvegardé.
+                </p>
+
+                <div class="chat-box" id="chat-box">
+                    {% for msg in support_messages %}
+                    <div class="message-wrapper {% if msg.is_from_admin %}admin{% else %}restaurant{% endif %}">
+                        <div class="message-bubble {% if msg.is_from_admin %}admin{% else %}restaurant{% endif %}">
+                            {{ msg.message|urlize }}
+                        </div>
+                        <span class="message-info">
+                            {% if msg.is_from_admin %}I-Neklou Admin{% else %}{{ restaurant.name }}{% endif %} • {{
+                            msg.created_at|date:"d M H:i" }}
+                        </span>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <p>Aucun message échangé pour le moment.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <form method="POST" action="{% url 'admin_restaurant_detail' restaurant_id %}" class="message-form">
+                    {% csrf_token %}
+                    <input type="text" name="support_message" placeholder="Votre message au propriétaire..." required
+                        class="message-input">
+                    <button type="submit" class="btn-send">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Passage des données Python vers JS
+    const restaurant = JSON.parse('{{ admin_restaurant_json|escapejs }}');
+</script>
+<script src="{% static 'admin/admin_restaurant_detail.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,112 @@
+\renewcommand{\arraystretch}{1.8}
+\setlength{\extrarowheight}{6pt}
+\begin{longtable}{|p{6cm}|p{10cm}|}
+\hline
+\rule{0pt}{12pt} Cas d'utilisation & \rule{0pt}{12pt} Réserver une table \\ 
+\hline
+\rule{0pt}{12pt} Acteur principal & \rule{0pt}{12pt} Utilisateur (Client) \\ 
+\hline
+\rule{0pt}{12pt} Pré-conditions & \rule{0pt}{12pt} 
+\begin{itemize}
+\setlength{\itemsep}{2pt}
+\item L'utilisateur est authentifié
+\item L'utilisateur consulte la fiche d'un restaurant
+\end{itemize} \\ 
+\hline
+\rule{0pt}{12pt} Post-conditions & \rule{0pt}{12pt} 
+\begin{itemize}
+\setlength{\itemsep}{2pt}
+\item Une réservation est créée avec statut "en attente"
+\item Une fenêtre modale de confirmation avec récapitulatif est affichée
+\item L'utilisateur est redirigé vers "Mon Compte" après 4 secondes
+\item Le restaurant reçoit la demande de réservation
+\end{itemize} \\ 
+\hline
+\rule{0pt}{12pt} \textbf{Enchaînement nominal} & \rule{0pt}{10pt}
+\begin{enumerate}
+\setlength{\itemsep}{2pt}
+\item L'utilisateur clique sur "Réserver une table".
+\item Le système affiche un formulaire de réservation avec :
+  \begin{itemize}
+  \item Sélection de la date (à partir d'aujourd'hui)
+  \item Sélection de l'heure parmi les créneaux disponibles
+  \item Nombre de personnes (1-8)
+  \item Nom complet (pré-rempli si utilisateur connecté)
+  \item Téléphone (format tunisien)
+  \item Demandes spéciales (optionnel)
+  \end{itemize}
+\item L'utilisateur remplit le formulaire.
+\item L'utilisateur soumet le formulaire.
+\item Le système valide les données côté client :
+  \begin{itemize}
+  \item Nom : 2-50 caractères, lettres seulement
+  \item Téléphone : 8 chiffres, commence par 2,4,5,7,9
+  \item Heure : doit être sélectionnée
+  \end{itemize}
+\item Le système enregistre la réservation avec statut "en attente".
+\item Le système affiche une fenêtre modale de confirmation avec récapitulatif.
+\item Après 4 secondes, le système redirige automatiquement vers "Mon Compte".
+\end{enumerate} \\ 
+\hline
+\rule{0pt}{12pt} \textbf{Enchaînements d'exception} & \rule{0pt}{8pt}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\item \textbf{E1 : Champ obligatoire vide}
+\begin{enumerate}
+\item Le système affiche un message d'erreur sous le champ concerné.
+\item Retour à la saisie du formulaire.
+\end{enumerate}
+\item \textbf{E2 : Format nom incorrect}
+\begin{enumerate}
+\item Le système affiche "Le nom doit contenir entre 2 et 50 caractères (lettres seulement)".
+\item Retour à la saisie du formulaire.
+\end{enumerate}
+\item \textbf{E3 : Format téléphone incorrect}
+\begin{enumerate}
+\item Le système affiche "Numéro invalide. 8 chiffres requis, commençant par 2,4,5,7 ou 9".
+\item Retour à la saisie du formulaire.
+\end{enumerate}
+\item \textbf{E4 : Heure non sélectionnée}
+\begin{enumerate}
+\item Le système affiche "Veuillez sélectionner un créneau horaire".
+\item Retour à la saisie du formulaire.
+\end{enumerate}
+\end{itemize} \\ 
+\hline
+\rule{0pt}{12pt} \textbf{Enchaînements alternatifs} & \rule{0pt}{8pt}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\item \textbf{A1 : Créneau marqué "Complet"}
+\begin{enumerate}
+\item Le système génère aléatoirement des créneaux "complets".
+\item L'utilisateur ne peut pas sélectionner ces créneaux.
+\item L'utilisateur doit choisir un autre créneau disponible.
+\end{enumerate}
+\item \textbf{A2 : Réservation acceptée par le restaurant}
+\begin{enumerate}
+\item Le restaurant consulte la demande de réservation.
+\item Le restaurant accepte la réservation.
+\item Le statut passe à "confirmée".
+\item L'utilisateur est notifié dans "Mon Compte" $\rightarrow$ "Réservations".
+\end{enumerate}
+\item \textbf{A3 : Réservation refusée par le restaurant}
+\begin{enumerate}
+\item Le restaurant consulte la demande de réservation.
+\item Le restaurant refuse la réservation.
+\item Le statut passe à "refusée".
+\item L'utilisateur est notifié dans "Mon Compte" $\rightarrow$ "Réservations".
+\end{enumerate}
+\end{itemize} \\ 
+\hline
+\rule{0pt}{12pt} \textbf{Notes importantes} & \rule{0pt}{10pt}
+\begin{itemize}
+\setlength{\itemsep}{2pt}
+\item La disponibilité des créneaux est simulée (25\% de chance d'être "complet").
+\item Le restaurant décide ultérieurement d'accepter ou refuser la réservation.
+\item L'utilisateur peut suivre le statut de sa réservation dans "Mon Compte" $\rightarrow$ "Réservations".
+\item Les créneaux pour aujourd'hui sont filtrés selon l'heure actuelle.
+\item Une fiche récapitulative est affichée dans une modal avant redirection.
+\item Redirection automatique après 4 secondes ou manuelle via bouton "Fermer".
+\end{itemize} \\ 
+\hline
+\end{longtable}

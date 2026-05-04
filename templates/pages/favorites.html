@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Favoris — DineTunis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'user/styles.css' %}?v={% now 'U' %}">
+    <link rel="stylesheet" href="{% static 'user/favorites.css' %}?v={% now 'U' %}">
+</head>
+
+<body>
+
+    <!-- NAVBAR (inchangée) -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <a href="{% url 'index' %}" class="logo">
+                    <span class="logo-text">DineTunis</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="{% url 'index' %}">Accueil</a></li>
+                    <li><a href="{% url 'favorites' %}">Favoris</a></li>
+                    <li><a href="{% url 'loyalty' %}">Fidélité</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'mon_compte' %}" class="btn btn-outline">
+                        <i class="fas fa-user-circle"></i> {{ user.first_name|default:user.username }}
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-primary">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </a>
+                    {% else %}
+                    <a href="{% url 'auth' %}" class="btn btn-outline">Connexion</a>
+                    <a href="{% url 'auth' %}" class="btn btn-primary">S'inscrire</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="favorites-hero">
+        <div class="container">
+            <h1>Mes restaurants<br><em>préférés</em></h1>
+            <p>Retrouvez tous vos coups de cœur en un seul endroit</p>
+        </div>
+        <div class="favorites-hero-border"></div>
+    </section>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="main-content">
+        <div class="container">
+            <div class="favorites-wrapper">
+
+                <!-- FILTRES -->
+                <div class="favorites-filters">
+                    <button class="filter-btn active" data-categorie="all">
+                        <span>Tous</span>
+                    </button>
+                    <button class="filter-btn" data-categorie="tunisienne">
+                        <span>Tunisienne</span>
+                    </button>
+                    <button class="filter-btn" data-categorie="italienne">
+                        <span>Italienne</span>
+                    </button>
+                    <button class="filter-btn" data-categorie="autres">
+                        <span>Autres cuisines</span>
+                    </button>
+                </div>
+
+                <!-- GRILLE -->
+                <div class="favorites-grid" id="favoritesGrid">
+                    {% for favori in favoris %}
+                    <div class="favorite-card" data-category="{{ favori.category|default:'autres' }}">
+
+                        <!-- IMAGE -->
+                        <div class="favorite-card-image">
+                            <img
+                                src="{{ favori.restaurant_image|default:'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&fit=crop' }}"
+                                alt="{{ favori.restaurant_name }}"
+                                loading="lazy"
+                            >
+                            <!-- Badge cuisine -->
+                            <span class="cuisine-badge">{{ favori.cuisine|default:"Cuisine variée" }}</span>
+
+                            <!-- Bouton retirer favori -->
+                            <button
+                                class="heart-btn active"
+                                data-restaurant-id="{{ favori.restaurant_id }}"
+                                title="Retirer des favoris"
+                            >
+                                <span class="heart-icon">♥</span>
+                            </button>
+
+                            <!-- Rating flottant -->
+                            <div class="rating-float">
+                                <span class="star">★</span>
+                                {{ favori.rating|default:"4.5" }}
+                            </div>
+                        </div>
+
+                        <!-- CONTENU -->
+                        <div class="favorite-card-content">
+                            <h3 class="favorite-card-title">{{ favori.restaurant_name }}</h3>
+
+                            <div class="favorite-card-info">
+                                <span>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    {{ favori.location|default:"Tunis" }}
+                                </span>
+                                <span class="sep"></span>
+                                <span>{{ favori.price_range|default:"30–80 DT" }}</span>
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="favorite-card-actions">
+                                <button
+                                    class="favorite-card-btn"
+                                    data-restaurant-id="{{ favori.restaurant_id }}"
+                                >
+                                    <span>Voir les détails</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                    {% empty %}
+                    <div id="emptyMessage" class="empty-message">
+                        <p>Aucun restaurant favori pour le moment</p>
+                        <a href="{% url 'index' %}" class="btn-primary">Découvrir les restaurants</a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <p>DineTunis &mdash; À table !</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'user/favorites.js' %}?v={% now 'U' %}"></script>
+</body>
+</html>

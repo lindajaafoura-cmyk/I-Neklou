@@ -1,0 +1,32 @@
+@startuml UC10 – Consulter l'espace compte (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam sequenceBoxBorderColor #C48EA1
+skinparam sequenceBoxBackgroundColor #FDF0F5
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Consulter l'espace compte
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_MonCompte" as UI
+control "Controller" as C
+entity "Utilisateur" as DB
+
+ref over U, UI, C, DB : (S'authentifier)
+
+U -> UI : 1 : Cliquer sur "Mon Compte"
+UI -> C : 2 : Demander les données du compte
+C -> DB : 3 : filter(user_id)
+DB --> C : 4 : Retourner profil + réservations
+C --> UI : 5 : Transmettre les données
+UI --> U : 6 : Afficher la page "Mon Compte"
+
+@enduml

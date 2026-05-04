@@ -1,0 +1,429 @@
+{% extends 'pages/admin-panel/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard & Statistiques - Administration I-Neklou{% endblock %}
+
+{% block page_icon %}<i class="fas fa-chart-line"></i>{% endblock %}
+{% block page_title %}Dashboard & Statistiques{% endblock %}
+
+{% block extra_css %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<!-- Stats Grid (visible en tout temps) -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ total_users }}</div>
+                <div class="stat-label">Utilisateurs</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ total_restaurants }}</div>
+                <div class="stat-label">Restaurants</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ pending_restaurants }}</div>
+                <div class="stat-label">En attente</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-hourglass-half"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ active_restaurants }}</div>
+                <div class="stat-label">Actifs</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ new_users_30d }}</div>
+                <div class="stat-label">Nouveaux utilisateurs (30j)</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-header">
+            <div>
+                <div class="stat-value">{{ new_restaurants_30d }}</div>
+                <div class="stat-label">Nouveaux restaurants (30j)</div>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-plus-circle"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Onglets de navigation -->
+<div class="admin-tabs">
+    <button class="admin-tab active" onclick="afficherSection('dashboard', this)">Dashboard</button>
+    <button class="admin-tab" onclick="afficherSection('statistics', this)">Statistiques détaillées</button>
+</div>
+
+<!-- Section Dashboard (activité récente) -->
+<div id="dashboard-section" class="section-content">
+    <div class="content-grid">
+        <!-- Restaurants en attente -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-hourglass-half"></i>
+                    Restaurants en attente
+                </h2>
+                <a href="{% url 'admin_restaurants' %}?status=pending" class="btn btn-sm btn-outline">Voir tous</a>
+            </div>
+
+            {% if pending_rest %}
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Ville</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for restaurant in pending_rest %}
+                        <tr>
+                            <td><strong>{{ restaurant.name }}</strong></td>
+                            <td>{{ restaurant.city|default:"N/A" }}</td>
+                            <td>{{ restaurant.created_at|date:"d/m/Y" }}</td>
+                            <td>
+                                <a href="{% url 'admin_restaurant_detail' restaurant.id %}"
+                                    class="btn btn-sm btn-icon view">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-check-circle"></i>
+                <p>Aucun restaurant en attente</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Utilisateurs récents -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-user-plus"></i>
+                    Utilisateurs récents
+                </h2>
+                <a href="{% url 'admin_users' %}" class="btn btn-sm btn-outline">Voir tous</a>
+            </div>
+
+            {% if recent_users %}
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in recent_users %}
+                        <tr>
+                            <td><strong>{{ user.get_full_name|default:user.username }}</strong></td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.date_joined|date:"d/m/Y" }}</td>
+                            <td>
+                                <a href="{% url 'admin_user_detail' user.id %}" class="btn btn-sm btn-icon view">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>Aucun utilisateur</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Distribution par type (vue rapide) -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <i class="fas fa-pie-chart"></i>
+                Distribution des utilisateurs
+            </h2>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Nombre</th>
+                        <th>Pourcentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in user_stats %}
+                    <tr>
+                        <td>
+                            <span class="badge badge-{{ stat.user_type }}">
+                                {% if stat.user_type == 'user' %}Utilisateur
+                                {% elif stat.user_type == 'restaurant' %}Restaurant
+                                {% elif stat.user_type == 'admin' %}Administrateur
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td><strong>{{ stat.count }}</strong></td>
+                        <td>{{ stat.count|add:0 }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Section Statistiques détaillées -->
+<div id="statistics-section" class="section-content" style="display: none;">
+    <!-- Graphiques -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3 class="chart-title">
+                <i class="fas fa-chart-pie"></i>
+                Distribution par type d'utilisateur
+            </h3>
+            <div class="chart-container">
+                <canvas id="userTypeChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3 class="chart-title">
+                <i class="fas fa-chart-bar"></i>
+                Distribution des restaurants par statut
+            </h3>
+            <div class="chart-container">
+                <canvas id="restaurantStatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Distribution par type d'utilisateur (détaillée) -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <i class="fas fa-pie-chart"></i>
+                Distribution des utilisateurs par type
+            </h2>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Nombre</th>
+                        <th>Pourcentage</th>
+                        <th>Visualisation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in user_type_dist %}
+                    {% with total=total_users %}
+                    <tr>
+                        <td>
+                            <strong>
+                                {% if item.user_type == 'user' %}Utilisateurs
+                                {% elif item.user_type == 'restaurant' %}Restaurants
+                                {% elif item.user_type == 'admin' %}Administrateurs
+                                {% endif %}
+                            </strong>
+                        </td>
+                        <td>{{ item.count }}</td>
+                        <td>
+                            {% if total > 0 %}
+                            {{ item.percentage }}%
+                            {% else %}
+                            0%
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill"
+                                    style="width: {% if total > 0 %}{{ item.percentage }}{% else %}0{% endif %}%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Distribution des restaurants par statut -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <i class="fas fa-chart-pie"></i>
+                Distribution des restaurants par statut
+            </h2>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Statut</th>
+                        <th>Nombre</th>
+                        <th>Pourcentage</th>
+                        <th>Visualisation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in restaurant_status_dist %}
+                    {% with total=total_restaurants %}
+                    <tr>
+                        <td>
+                            <span class="badge badge-{{ item.status }}">
+                                {% if item.status == 'pending' %}En attente
+                                {% elif item.status == 'approved' %}Approuvé
+                                {% elif item.status == 'rejected' %}Rejeté
+                                {% elif item.status == 'suspended' %}Suspendu
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td>{{ item.count }}</td>
+                        <td>
+                            {% if total > 0 %}
+                            {{ item.percentage }}%
+                            {% else %}
+                            0%
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill"
+                                    style="width: {% if total > 0 %}{{ item.percentage }}{% else %}0{% endif %}%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Top 10 villes -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <i class="fas fa-map-marker-alt"></i>
+                Top 10 villes avec le plus de restaurants
+            </h2>
+        </div>
+
+        {% if restaurants_by_city %}
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ville</th>
+                        <th>Nombre de restaurants</th>
+                        <th>Pourcentage</th>
+                        <th>Visualisation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in restaurants_by_city %}
+                    {% with total=total_restaurants %}
+                    <tr>
+                        <td><strong>{{ item.city|default:"Non renseignée" }}</strong></td>
+                        <td>{{ item.count }}</td>
+                        <td>
+                            {% if total > 0 %}
+                            {{ item.percentage }}%
+                            {% else %}
+                            0%
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill"
+                                    style="width: {% if total > 0 %}{{ item.percentage }}{% else %}0{% endif %}%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>Aucune donnée disponible</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Compteurs cachés pour les graphiques JS -->
+<span id="count-user" style="display:none;">{% for item in user_type_dist %}{% if item.user_type == 'user' %}{{ item.count }}{% endif %}{% endfor %}</span>
+<span id="count-restaurant" style="display:none;">{% for item in user_type_dist %}{% if item.user_type == 'restaurant' %}{{ item.count }}{% endif %}{% endfor %}</span>
+<span id="count-admin" style="display:none;">{% for item in user_type_dist %}{% if item.user_type == 'admin' %}{{ item.count }}{% endif %}{% endfor %}</span>
+<span id="count-pending" style="display:none;">{% for item in restaurant_status_dist %}{% if item.status == 'pending' %}{{ item.count }}{% endif %}{% endfor %}</span>
+<span id="count-approved" style="display:none;">{% for item in restaurant_status_dist %}{% if item.status == 'approved' %}{{ item.count }}{% endif %}{% endfor %}</span>
+<span id="count-rejected" style="display:none;">{% for item in restaurant_status_dist %}{% if item.status == 'rejected' %}{{ item.count }}{% endif %}{% endfor %}</span>
+<span id="count-suspended" style="display:none;">{% for item in restaurant_status_dist %}{% if item.status == 'suspended' %}{{ item.count }}{% endif %}{% endfor %}</span>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'admin/admin_dashboard.js' %}"></script>
+{% endblock %}

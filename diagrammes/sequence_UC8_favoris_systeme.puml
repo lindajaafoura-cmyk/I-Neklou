@@ -1,0 +1,34 @@
+@startuml UC8a – Mettre en favoris (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Mettre en favoris
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+
+U -> S : 1 : Cliquer sur l'icône cœur d'un restaurant
+S -> S : 2 : Vérifier si le restaurant est déjà en favori
+
+alt [pas encore en favori]
+    S -> S : 3 : Enregistrer le restaurant dans les favoris\n(nom, image, cuisine, note, localisation)
+    S --> U : 4 : Mettre à jour l'icône (cœur plein)
+    S --> U : 5 : Afficher notification "Ajouté aux favoris ♥"
+else [déjà en favori]
+    S -> S : 3 : Retirer le restaurant des favoris
+    S --> U : 4 : Mettre à jour l'icône (cœur vide)
+    S --> U : 5 : Afficher notification "Retiré des favoris"
+end
+
+@enduml

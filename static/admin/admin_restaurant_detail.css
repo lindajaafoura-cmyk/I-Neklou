@@ -1,0 +1,261 @@
+/* ============================================================
+   ADMIN - RESTAURANT DETAIL — thème cohérent
+   ============================================================ */
+
+.restaurant-detail-container {
+    background: #FFFFFF;
+    border-radius: 8px;
+    border: 1px solid #E8E2D9;
+    overflow: hidden;
+}
+
+.restaurant-header {
+    padding: 28px 36px;
+    background: #1A1A1A;
+    color: #F0EBE0;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.restaurant-header h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    color: #F0EBE0;
+}
+
+.restaurant-header .meta {
+    display: flex;
+    gap: 22px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(240,235,224,0.6);
+}
+
+.restaurant-header .meta i { margin-right: 5px; color: #C96E4B; }
+
+.restaurant-content {
+    padding: 28px 36px;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 32px;
+    background: #EDE8DF;
+}
+
+/* --- SIDEBAR --- */
+.restaurant-sidebar {
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 22px;
+    border: 1px solid #E8E2D9;
+}
+
+.restaurant-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 6px;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 1px solid #E8E2D9;
+}
+
+.info-item { margin-bottom: 18px; }
+
+.info-label {
+    display: block;
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.info-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1C1C1C;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-value i { color: #2D5A3B; width: 14px; }
+
+/* Badges statut */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending   { background: rgba(245,124,0,0.1);  color: #F57C00; border: 1px solid rgba(245,124,0,0.25); }
+.status-approved  { background: rgba(46,125,50,0.1);  color: #2E7D32; border: 1px solid rgba(46,125,50,0.25); }
+.status-rejected  { background: rgba(198,40,40,0.1);  color: #C62828; border: 1px solid rgba(198,40,40,0.25); }
+.status-suspended { background: rgba(106,27,154,0.1); color: #6A1B9A; border: 1px solid rgba(106,27,154,0.25); }
+
+/* Actions */
+.action-buttons {
+    margin-top: 22px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #E8E2D9;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    background: #F9F6F0;
+    color: #1C1C1C;
+}
+
+.btn-approve { background: #2D5A3B; color: white; border-color: #2D5A3B; }
+.btn-approve:hover { background: #1a3828; }
+
+.btn-reject:hover  { background: #C62828; color: white; border-color: #C62828; }
+.btn-suspend:hover { background: #6A1B9A; color: white; border-color: #6A1B9A; }
+
+#btn-pay-link { width: 100%; margin-top: 8px; }
+#btn-pay-link:hover { background: #1C1C1C; color: white; border-color: #1C1C1C; }
+
+/* --- SECTIONS PRINCIPALES --- */
+.menu-section {
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid #E8E2D9;
+}
+
+.menu-section h3 {
+    font-size: 20px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: #1C1C1C;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F0EBE0;
+}
+
+.menu-section h3 i { color: #2D5A3B; font-size: 16px; }
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #F0EBE0;
+}
+
+.menu-item:last-child { border-bottom: none; }
+.menu-item-name  { font-weight: 500; font-size: 14px; color: #1C1C1C; }
+.menu-item-price { color: #2D5A3B; font-weight: 700; font-size: 13px; }
+
+/* Avis */
+.review-item {
+    padding: 16px;
+    background: #F9F6F0;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    border-left: 3px solid #C96E4B;
+}
+
+.review-user    { font-weight: 600; color: #1C1C1C; margin-bottom: 4px; font-size: 13px; }
+.review-rating  { color: #F4A623; margin-left: 8px; font-size: 12px; }
+.review-comment { color: #707070; font-size: 13px; font-style: italic; }
+
+/* Chat */
+.chat-box {
+    max-height: 360px;
+    overflow-y: auto;
+    padding: 20px;
+    background: #F9F6F0;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    border: 1px solid #E8E2D9;
+}
+
+.chat-box::-webkit-scrollbar { width: 4px; }
+.chat-box::-webkit-scrollbar-thumb { background: #C8C0B4; border-radius: 4px; }
+
+.message-wrapper { margin-bottom: 16px; display: flex; flex-direction: column; }
+.message-wrapper.admin      { align-items: flex-end; }
+.message-wrapper.restaurant { align-items: flex-start; }
+
+.message-bubble {
+    padding: 10px 16px;
+    border-radius: 8px;
+    max-width: 78%;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.message-bubble.admin      { background: #1C1C1C; color: white; border-bottom-right-radius: 2px; }
+.message-bubble.restaurant { background: white; color: #1C1C1C; border: 1px solid #E8E2D9; border-bottom-left-radius: 2px; }
+
+.message-info {
+    font-size: 10px;
+    color: #888;
+    margin-top: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.message-form { display: flex; gap: 12px; }
+
+.message-input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid #E8E2D9;
+    outline: none;
+    font-size: 13px;
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    color: #1C1C1C;
+    transition: border-color 0.2s;
+}
+
+.message-input:focus { border-color: #2D5A3B; }
+
+.btn-send {
+    background: #C96E4B;
+    color: white;
+    border: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-send:hover { background: #a85a3a; }
+
+.loading-spinner { text-align: center; padding: 40px; color: #2D5A3B; }
+.loading-spinner i { font-size: 40px; margin-bottom: 12px; }
+
+@media (max-width: 900px) {
+    .restaurant-content { grid-template-columns: 1fr; }
+}

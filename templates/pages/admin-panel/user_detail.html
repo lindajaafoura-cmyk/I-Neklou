@@ -1,0 +1,412 @@
+{% extends 'pages/admin-panel/base.html' %}
+{% load static %}
+
+{% block title %}{{ user.get_full_name|default:user.username }} - Administration{% endblock %}
+
+{% block page_icon %}<i class="fas fa-user"></i>{% endblock %}
+{% block page_title %}{{ user.get_full_name|default:user.username }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+    
+    @media (max-width: 1200px) {
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .info-section {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        border: 1px solid #F0E5D8;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #4A6B4D;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #F0E5D8;
+    }
+    
+    .section-title i {
+        color: #C96E4B;
+    }
+    
+    .info-row {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #F0E5D8;
+    }
+    
+    .info-row:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: #4A6B4D;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .info-value {
+        color: #2C2C2C;
+        font-size: 15px;
+    }
+    
+    .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .badge-user {
+        background: #E3F2FD;
+        color: #1565C0;
+    }
+    
+    .badge-restaurant {
+        background: #FFF3E0;
+        color: #E65100;
+    }
+    
+    .badge-admin {
+        background: #F3E5F5;
+        color: #6A1B9A;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    
+    .status-active {
+        background: #E8F5E9;
+        color: #2E7D32;
+    }
+    
+    .status-inactive {
+        background: #FFEBEE;
+        color: #C62828;
+    }
+    
+    .verified-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .verified-badge.yes {
+        background: #E8F5E9;
+        color: #2E7D32;
+    }
+    
+    .verified-badge.no {
+        background: #FFEBEE;
+        color: #C62828;
+    }
+    
+    .actions-section {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        border: 1px solid #F0E5D8;
+        height: fit-content;
+        position: sticky;
+        top: 30px;
+    }
+    
+    .actions-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #4A6B4D;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .actions-title i {
+        color: #C96E4B;
+    }
+    
+    .action-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .action-btn {
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+    
+    .action-btn.activate {
+        background: #27AE60;
+        color: white;
+    }
+    
+    .action-btn.activate:hover {
+        background: #1E8449;
+        transform: translateY(-2px);
+    }
+    
+    .action-btn.deactivate {
+        background: #E74C3C;
+        color: white;
+    }
+    
+    .action-btn.deactivate:hover {
+        background: #C0392B;
+        transform: translateY(-2px);
+    }
+    
+    .action-btn.verify {
+        background: #3498DB;
+        color: white;
+    }
+    
+    .action-btn.verify:hover {
+        background: #2980B9;
+        transform: translateY(-2px);
+    }
+    
+    .action-btn.unverify {
+        background: #95A5A6;
+        color: white;
+    }
+    
+    .action-btn.unverify:hover {
+        background: #7F8C8D;
+        transform: translateY(-2px);
+    }
+    
+    .action-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #4A6B4D;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+    
+    .back-link:hover {
+        color: #C96E4B;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'admin_users' %}" class="back-link">
+    <i class="fas fa-arrow-left"></i> Retour aux utilisateurs
+</a>
+
+<div class="detail-grid">
+    <!-- Informations principales -->
+    <div class="info-section">
+        <div class="section-title">
+            <i class="fas fa-info-circle"></i>
+            Informations de l'utilisateur
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">Nom d'utilisateur</div>
+            <div class="info-value">{{ user.username }}</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">Prénom</div>
+            <div class="info-value">{{ user.first_name|default:"Non renseigné" }}</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">Nom</div>
+            <div class="info-value">{{ user.last_name|default:"Non renseigné" }}</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">Email</div>
+            <div class="info-value">
+                <a href="mailto:{{ user.email }}" style="color: #4A6B4D;">{{ user.email }}</a>
+            </div>
+        </div>
+        
+        {% if profile %}
+        <div class="info-row">
+            <div class="info-label">Type</div>
+            <div class="info-value">
+                <span class="badge badge-{{ profile.user_type }}">
+                    {% if profile.user_type == 'user' %}Utilisateur
+                    {% elif profile.user_type == 'restaurant' %}Restaurant
+                    {% elif profile.user_type == 'admin' %}Administrateur
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">Téléphone</div>
+            <div class="info-value">{{ profile.phone|default:"Non renseigné" }}</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">Adresse</div>
+            <div class="info-value">{{ profile.address|default:"Non renseignée" }}</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">Vérifié</div>
+            <div class="info-value">
+                <span class="verified-badge {% if profile.is_verified %}yes{% else %}no{% endif %}">
+                    {% if profile.is_verified %}Oui{% else %}Non{% endif %}
+                </span>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="info-row">
+            <div class="info-label">Inscrit le</div>
+            <div class="info-value">{{ user.date_joined|date:"d/m/Y à H:i" }}</div>
+        </div>
+        
+        <div class="info-row">
+            <div class="info-label">Dernière connexion</div>
+            <div class="info-value">
+                {% if user.last_login %}
+                    {{ user.last_login|date:"d/m/Y à H:i" }}
+                {% else %}
+                    Jamais
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statut et Actions -->
+    <div class="actions-section">
+        <div class="actions-title">
+            <i class="fas fa-cog"></i>
+            Gestion
+        </div>
+        
+        <!-- Statut actuel -->
+        <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #F0E5D8;">
+            <div style="font-size: 12px; color: #A7B57A; font-weight: 600; text-transform: uppercase; margin-bottom: 10px;">État du compte</div>
+            <span class="status-badge {% if user.is_active %}status-active{% else %}status-inactive{% endif %}">
+                {% if user.is_active %}Actif{% else %}Inactif{% endif %}
+            </span>
+        </div>
+        
+        <!-- Actions -->
+        <form method="POST" class="action-form">
+            {% csrf_token %}
+            
+            {% if user.is_active %}
+            <button type="submit" name="action" value="deactivate" class="action-btn deactivate">
+                <i class="fas fa-ban"></i> Désactiver le compte
+            </button>
+            {% else %}
+            <button type="submit" name="action" value="activate" class="action-btn activate">
+                <i class="fas fa-check"></i> Activer le compte
+            </button>
+            {% endif %}
+            
+            {% if profile %}
+                {% if not profile.is_verified %}
+                <button type="submit" name="action" value="verify" class="action-btn verify">
+                    <i class="fas fa-check-circle"></i> Vérifier
+                </button>
+                {% else %}
+                <button type="submit" name="action" value="unverify" class="action-btn unverify">
+                    <i class="fas fa-times-circle"></i> Retirer vérification
+                </button>
+                {% endif %}
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<!-- Informations du restaurant associé -->
+{% if user.restaurant %}
+<div class="info-section">
+    <div class="section-title">
+        <i class="fas fa-utensils"></i>
+        Restaurant associé
+    </div>
+    
+    <div class="info-row">
+        <div class="info-label">Nom</div>
+        <div class="info-value">{{ user.restaurant.name }}</div>
+    </div>
+    
+    <div class="info-row">
+        <div class="info-label">Email</div>
+        <div class="info-value">{{ user.restaurant.email }}</div>
+    </div>
+    
+    <div class="info-row">
+        <div class="info-label">Statut</div>
+        <div class="info-value">
+            <span class="badge" style="background: 
+                {% if user.restaurant.status == 'pending' %}#FFF8E1; color: #F57C00;
+                {% elif user.restaurant.status == 'approved' %}#E8F5E9; color: #2E7D32;
+                {% elif user.restaurant.status == 'rejected' %}#FFEBEE; color: #C62828;
+                {% elif user.restaurant.status == 'suspended' %}#F3E5F5; color: #6A1B9A;
+                {% endif %}">
+                {% if user.restaurant.status == 'pending' %}En attente
+                {% elif user.restaurant.status == 'approved' %}Approuvé
+                {% elif user.restaurant.status == 'rejected' %}Rejeté
+                {% elif user.restaurant.status == 'suspended' %}Suspendu
+                {% endif %}
+            </span>
+        </div>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <a href="{% url 'admin_restaurant_detail' user.restaurant.id %}" class="btn btn-primary">
+            <i class="fas fa-utensils"></i> Voir le restaurant
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

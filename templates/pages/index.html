@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I-Neklou - Trouvez les Meilleurs Restaurants en Tunisie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'user/styles.css' %}">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo-container">
+                    <a href="{% url 'index' %}" class="logo-link">
+                        <i class="fas fa-utensils logo-icon"></i>
+                        <span class="logo-text">-Neklou</span>
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="{% url 'index' %}">Accueil</a></li>
+                    <li><a href="{% url 'favorites' %}">Favoris</a></li>
+                    <li><a href="{% url 'loyalty' %}">Fidelite</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'mon_compte' %}" class="btn btn-outline">
+                        <i class="fas fa-user"></i> {{ user.first_name|default:user.username }}
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-primary">Deconnexion</a>
+                    {% else %}
+                    <a href="{% url 'auth' %}" class="btn btn-outline">Connexion</a>
+                    <a href="{% url 'auth' %}" class="btn btn-primary">Inscription</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <p class="hero-eyebrow">Book. Eat. Rate.</p>
+                <h1>Trouvez les <em>Meilleurs</em><br>Restaurants</h1>
+                <p class="hero-subtitle">Découvrez les saveurs authentiques de Tunisie</p>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Rechercher un restaurant...">
+                    <button id="searchBtn">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="hero-fade-bottom"></div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="container">
+            <div class="content-wrapper">
+
+                <!-- SIDEBAR FILTRES -->
+                <aside class="sidebar">
+                    <h3><i class="fas fa-sliders-h"></i> Filtres</h3>
+
+                    <div class="filter-group">
+                        <div class="filter-group-header" onclick="toggleFilter(this)">
+                            <h4>Ville</h4>
+                            <i class="fas fa-chevron-up filter-group-arrow"></i>
+                        </div>
+                        <div class="filter-group-content">
+                            <label><input type="checkbox" class="filter-ville" value="tunis"> Tunis</label>
+                            <label><input type="checkbox" class="filter-ville" value="sfax"> Sfax</label>
+                            <label><input type="checkbox" class="filter-ville" value="sousse"> Sousse</label>
+                            <label><input type="checkbox" class="filter-ville" value="nabeul"> Nabeul</label>
+                            <label><input type="checkbox" class="filter-ville" value="bizerte"> Bizerte</label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="filter-group-header" onclick="toggleFilter(this)">
+                            <h4>Cuisine</h4>
+                            <i class="fas fa-chevron-up filter-group-arrow"></i>
+                        </div>
+                        <div class="filter-group-content">
+                            <label><input type="checkbox" class="filter-cuisine" value="tunisienne"> Tunisienne</label>
+                            <label><input type="checkbox" class="filter-cuisine" value="italienne"> Italienne</label>
+                            <label><input type="checkbox" class="filter-cuisine" value="francaise"> Française</label>
+                            <label><input type="checkbox" class="filter-cuisine" value="mediterraneenne"> Méditerranéenne</label>
+                            <label><input type="checkbox" class="filter-cuisine" value="japonaise"> Japonaise</label>
+                            <label><input type="checkbox" class="filter-cuisine" value="autres"> Autres</label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="filter-group-header" onclick="toggleFilter(this)">
+                            <h4>Budget</h4>
+                            <i class="fas fa-chevron-up filter-group-arrow"></i>
+                        </div>
+                        <div class="filter-group-content">
+                            <div class="price-slider-wrapper">
+                                <div class="price-range-labels">
+                                    <span>0 DT</span>
+                                    <span>150+ DT</span>
+                                </div>
+                                <input type="range" class="price-slider" id="priceSlider" min="0" max="150" value="150" step="10">
+                                <div class="price-current" id="priceLabel">Tous les budgets</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <div class="filter-group-header" onclick="toggleFilter(this)">
+                            <h4>Note</h4>
+                            <i class="fas fa-chevron-up filter-group-arrow"></i>
+                        </div>
+                        <div class="filter-group-content">
+                            <label><input type="radio" name="rating" value="0" checked> Toutes</label>
+                            <label><input type="radio" name="rating" value="1"> ★ 1 étoile</label>
+                            <label><input type="radio" name="rating" value="2"> ★★ 2 étoiles</label>
+                            <label><input type="radio" name="rating" value="3"> ★★★ 3 étoiles</label>
+                            <label><input type="radio" name="rating" value="4"> ★★★★ 4 étoiles</label>
+                            <label><input type="radio" name="rating" value="5"> ★★★★★ 5 étoiles</label>
+                        </div>
+                    </div>
+
+                    <button id="resetFilters" class="btn-reset"><span>↻ Réinitialiser</span></button>
+                </aside>
+
+                <!-- RESTAURANTS -->
+                <section class="restaurants">
+                    <div class="restaurants-header">
+                        <h2>Restaurants disponibles</h2>
+                        <p id="restaurantCount" class="count">{{ restaurants|length }} restaurant{{ restaurants|length|pluralize }} trouve{{ restaurants|length|pluralize }}</p>
+                    </div>
+
+                    <div id="restaurantsGrid" class="restaurants-grid">
+                        {% for resto in restaurants %}
+                        <div class="restaurant-card"
+                            data-id="{{ resto.id }}"
+                            data-cuisine="{{ resto.cuisine|lower }}"
+                            data-budget="{{ resto.price }}"
+                            data-rating="{{ resto.rating }}"
+                            data-ville="{{ resto.location|lower }}"
+                            data-url="{% url 'restaurant_detail' resto.id %}"
+                            onclick="window.location.href=this.dataset.url">
+                            <div class="card-badge">{{ resto.cuisine }}</div>
+                            {% if resto.promotion %}
+                            <div class="card-promo-tag">
+                                <i class="fas fa-tag"></i> -{{ resto.promotion.discount }}%
+                            </div>
+                            {% endif %}
+                            <div class="card-img" style="background-image: url('{{ resto.image }}')">
+                                <button class="fav-btn" onclick="basculerFavori(event, '{{ resto.id }}', '{{ resto.name|escapejs }}', '{{ resto.image|escapejs }}', '{{ resto.cuisine|escapejs }}', '{{ resto.rating }}', '{{ resto.location|escapejs }}', '')">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-header-row">
+                                    <h3 class="card-title">{{ resto.name }}</h3>
+                                    <span class="card-price">
+                                        {% if resto.price == "$" %}30-80 DT
+                                        {% elif resto.price == "$$" %}80-150 DT
+                                        {% else %}150+ DT
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="card-meta-row">
+                                    <div class="card-rating">
+                                        <i class="fas fa-star"></i> {{ resto.rating|default:"4" }}
+                                    </div>
+                                    <div class="card-location">
+                                        <i class="fas fa-map-marker-alt"></i> {{ resto.location|default:"Tunis" }}
+                                    </div>
+                                </div>
+                                <p class="card-description">{{ resto.description }}</p>
+                                {% if resto.promotion %}
+                                <div class="card-promotion-mini">
+                                    <i class="fas fa-gift"></i> <span>{{ resto.promotion.title }}</span>
+                                </div>
+                                {% endif %}
+                                <div class="card-actions">
+                                    <a href="{% url 'restaurant_detail' resto.id %}" class="btn-card btn-detail" onclick="event.stopPropagation()">
+                                        <i class="far fa-eye"></i> <span>Voir les détails</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="empty-state">Aucun restaurant pour le moment.</div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                {{ db_restaurants|json_script:"restaurants-data" }}
+                <script>
+                    // Données MongoDB disponibles si besoin (non utilisées pour le filtrage)
+                    const restaurantsData = document.getElementById('restaurants-data');
+                    window.DB_RESTAURANTS = restaurantsData ? JSON.parse(restaurantsData.textContent) : [];
+                </script>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 I-Neklou - Tous droits reserves</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="{% static 'user/script.js' %}"></script>
+    <script>
+        // Toggle sections filtres
+        function toggleFilter(header) {
+            const group = header.parentElement;
+            group.classList.toggle('collapsed');
+        }
+
+        // Slider prix
+        const slider = document.getElementById('priceSlider');
+        const priceLabel = document.getElementById('priceLabel');
+        if (slider) {
+            slider.addEventListener('input', function() {
+                const val = this.value;
+                priceLabel.textContent = val >= 150 ? 'Tous les budgets' : 'Max: ' + val + ' DT';
+                const pct = (val / 150) * 100;
+                this.style.background = `linear-gradient(to right, #2D5A3B 0%, #2D5A3B ${pct}%, #ddd ${pct}%, #ddd 100%)`;
+                filtrerRestaurants();
+            });
+        }
+    </script>
+</body>
+
+</html>

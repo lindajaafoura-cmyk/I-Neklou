@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Restaurant - I-Neklou</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="{% static 'user/styles.css' %}?v={% now 'U' %}">
+    <link rel="stylesheet" href="{% static 'user/restaurant_detail.css' %}?v={% now 'U' %}">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo-container">
+                    <a href="{% url 'index' %}" class="logo-link">
+                        <i class="fas fa-utensils logo-icon"></i>
+                        <span class="logo-text">-Neklou</span>
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="{% url 'index' %}">Accueil</a></li>
+                    <li><a href="{% url 'favorites' %}">Favoris</a></li>
+                    <li><a href="{% url 'loyalty' %}">Fidélité</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'mon_compte' %}" class="btn btn-outline">
+                        <i class="fas fa-user"></i> {{ user.first_name|default:user.username }}
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-primary">Déconnexion</a>
+                    {% else %}
+                    <a href="{% url 'auth' %}" class="btn btn-outline">Connexion</a>
+                    <a href="{% url 'auth' %}" class="btn btn-primary">S'inscrire</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SECTION SHOWCASE -->
+    <div id="showcase-section">
+        <div class="showcase-area" id="showcaseArea">
+            <div class="showcase-container">
+                <span class="cuisine-badge" id="cuisineBadge"></span>
+                <h1 class="main-title" id="restaurantNom"></h1>
+                <p class="showcase-meta" id="restaurantMeta"></p>
+                <div class="showcase-rating" id="restaurantNote"></div>
+                <div class="showcase-actions">
+                    <button class="btn-showcase" id="btnReserver">Réserver une table</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION À PROPOS -->
+    <section id="detail-about" class="detail-section">
+        <div id="promotionsBanner"></div>
+        <div class="about-wrapper">
+            <div class="about-text">
+                <span class="small">À propos</span>
+                <h2 id="aboutNom"></h2>
+                <p id="aboutDescription"></p>
+                <div class="info-grid" id="infoGrille"></div>
+            </div>
+            <div class="about-img">
+                <img id="aboutImage" src="" alt="Photo du restaurant">
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION MENU -->
+    <section id="food-menu" class="detail-section">
+        <h2 class="food-menu-heading">Notre Menu</h2>
+        <div class="menu-categories" id="menuCategories"></div>
+        <div class="food-menu-container" id="menuItems"></div>
+    </section>
+
+    <!-- SECTION AVIS -->
+    <section id="testimonials" class="detail-section">
+        <h2 class="testimonial-title">Ce que disent nos clients</h2>
+        <div class="testimonial-container" id="listeAvis"></div>
+    </section>
+
+    <!-- SECTION FORMULAIRE AVIS -->
+    <section id="review-form-section" class="detail-section" style="padding: 0;">
+        <div class="review-form-wrapper">
+            <div class="review-form-img">
+                <img id="formImage" src="" alt="Restaurant">
+            </div>
+            <div class="form-container">
+                <h2 class="form-title-main">Partagez votre expérience</h2>
+                <p class="form-subtitle">Votre avis aide les autres gourmets à mieux choisir.</p>
+                <form id="formulaireAvis">
+                    <input type="text" id="avisNom" required placeholder="Votre nom complet" minlength="2" maxlength="50">
+                    <div class="rating-row">
+                        <span class="rating-label">Votre note :</span>
+                        <div class="rating-stars-input" id="etoilesNote">
+                            <span class="star" data-value="1">☆</span>
+                            <span class="star" data-value="2">☆</span>
+                            <span class="star" data-value="3">☆</span>
+                            <span class="star" data-value="4">☆</span>
+                            <span class="star" data-value="5">☆</span>
+                        </div>
+                        <input type="hidden" id="noteChoisie" value="0">
+                    </div>
+                    <textarea id="avisCommentaire" required placeholder="Racontez-nous votre expérience..." minlength="5" maxlength="500"></textarea>
+                    <button type="submit" class="btn-submit-review">
+                        Publier l'avis &nbsp;<i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div>
+                    <div class="footer-brand">I-<em>Neklou</em></div>
+                    <div class="footer-tagline">Votre guide gastronomique</div>
+                </div>
+                <div class="footer-links">
+                    <a href="{% url 'index' %}">Accueil</a>
+                    <a href="{% url 'favorites' %}">Favoris</a>
+                    <a href="{% url 'loyalty' %}">Fidélité</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 I-Neklou — Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const dbRestaurant = JSON.parse('{{ db_restaurant|escapejs }}');
+    </script>
+    <script defer src="{% static 'user/restaurant_detail.js' %}?v={% now 'U' %}"></script>
+
+</body>
+</html>

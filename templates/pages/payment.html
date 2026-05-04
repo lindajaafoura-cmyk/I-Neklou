@@ -1,0 +1,373 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement - I-Neklou</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'user/styles.css' %}">
+    <style>
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #F9F6F0;
+            color: #1C1C1C;
+            min-height: 100vh;
+        }
+
+        .pay-wrapper {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 60px 20px 100px;
+        }
+
+        .pay-logo {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .pay-logo a {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 36px;
+            font-weight: 300;
+            color: #1C1C1C;
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        .pay-logo a em { font-style: italic; color: #E8956D; }
+
+        .pay-eyebrow {
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #888;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .pay-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 42px;
+            font-weight: 300;
+            text-align: center;
+            color: #1C1C1C;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .pay-subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            font-weight: 300;
+            margin-bottom: 50px;
+        }
+
+        .pay-grid {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* LEFT — form */
+        .pay-form-side {
+            background: white;
+            border: 1.5px solid #1C1C1C;
+            padding: 40px;
+        }
+
+        /* RIGHT — summary */
+        .pay-summary {
+            background: #1C1C1C;
+            color: white;
+            padding: 36px 28px;
+            position: sticky;
+            top: 30px;
+        }
+
+        .pay-summary h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 300;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            padding-bottom: 16px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 12px;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 22px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            color: white;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .summary-total span:last-child { color: #E8956D; }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 24px 0 0;
+        }
+
+        .features-list li {
+            font-size: 12px;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .features-list i { color: #2D5A3B; font-size: 11px; }
+
+        /* Methods */
+        .method-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #1C1C1C;
+            margin-bottom: 14px;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .method-tab {
+            flex: 1;
+            padding: 16px;
+            border: 1.5px solid #e0ddd8;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            background: #F9F6F0;
+        }
+
+        .method-tab.active {
+            border-color: #1C1C1C;
+            background: white;
+        }
+
+        .method-tab i { font-size: 22px; color: #888; }
+        .method-tab.active i { color: #1C1C1C; }
+
+        .method-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #888;
+            letter-spacing: 0.5px;
+        }
+
+        .method-tab.active .method-name { color: #1C1C1C; }
+
+        /* Form fields */
+        .form-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #1C1C1C;
+            margin-bottom: 18px;
+        }
+
+        .form-group { margin-bottom: 18px; }
+
+        .form-group label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #E8956D;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 13px 16px;
+            border: none;
+            border-bottom: 1.5px solid #c8c4bc;
+            background: transparent;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            color: #1C1C1C;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-control::placeholder { color: #aaa; }
+        .form-control:focus { border-bottom-color: #1C1C1C; }
+
+        .form-row { display: flex; gap: 20px; }
+        .form-row .form-group { flex: 1; }
+
+        .edinar-info {
+            background: #F9F6F0;
+            border: 1.5px solid #e0ddd8;
+            padding: 24px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .btn-pay {
+            background: #1C1C1C;
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 28px;
+            transition: all 0.3s;
+        }
+
+        .btn-pay:hover { background: #2D5A3B; letter-spacing: 3px; }
+
+        .pay-secure {
+            text-align: center;
+            color: #aaa;
+            font-size: 11px;
+            margin-top: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 700px) {
+            .pay-grid { grid-template-columns: 1fr; }
+            .pay-summary { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="pay-wrapper">
+        <div class="pay-logo">
+            <a href="{% url 'presentation' %}">I-<em>Neklou</em></a>
+        </div>
+
+        <p class="pay-eyebrow">Inscription Restaurant</p>
+        <h1 class="pay-title">Finalisez votre adhésion</h1>
+        <p class="pay-subtitle">Règlement sécurisé des frais d'inscription à la plateforme.</p>
+
+        <div class="pay-grid">
+
+            <!-- FORMULAIRE -->
+            <div class="pay-form-side">
+                <p class="method-label">Mode de paiement</p>
+                <div class="payment-methods">
+                    <div class="method-tab active" onclick="switchMethod('card', this)">
+                        <i class="fas fa-credit-card"></i>
+                        <span class="method-name">Carte Bancaire</span>
+                    </div>
+                    <div class="method-tab" onclick="switchMethod('edinar', this)">
+                        <i class="fas fa-university"></i>
+                        <span class="method-name">e-Dinar / La Poste</span>
+                    </div>
+                </div>
+
+                <form method="POST" id="paymentForm">
+                    {% csrf_token %}
+
+                    <div id="card-form">
+                        <p class="form-section-title">Informations de carte</p>
+                        <div class="form-group">
+                            <label>Nom sur la carte</label>
+                            <input type="text" class="form-control" placeholder="Prénom NOM" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Numéro de carte</label>
+                            <input type="text" class="form-control" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiration</label>
+                                <input type="text" class="form-control" placeholder="MM/AA" maxlength="5" required>
+                            </div>
+                            <div class="form-group">
+                                <label>CVV</label>
+                                <input type="text" class="form-control" placeholder="123" maxlength="3" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="edinar-form" style="display:none;">
+                        <div class="edinar-info">
+                            <i class="fas fa-info-circle" style="color:#E8956D;margin-bottom:10px;font-size:24px;display:block;"></i>
+                            Vous serez redirigé vers le portail sécurisé de la Poste Tunisienne pour finaliser votre paiement.
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-pay">Confirmer le règlement — 50 DT</button>
+                </form>
+
+                <p class="pay-secure"><i class="fas fa-lock"></i> &nbsp;Paiement 100% sécurisé via ClicToPay</p>
+            </div>
+
+            <!-- RÉSUMÉ -->
+            <div class="pay-summary">
+                <h3>Récapitulatif</h3>
+                <div class="summary-item">
+                    <span>Inscription plateforme</span>
+                    <span>50 DT</span>
+                </div>
+                <div class="summary-item">
+                    <span>TVA</span>
+                    <span>Incluse</span>
+                </div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>50 DT</span>
+                </div>
+                <ul class="features-list">
+                    <li><i class="fas fa-check"></i> Fiche restaurant premium</li>
+                    <li><i class="fas fa-check"></i> Menu interactif illimité</li>
+                    <li><i class="fas fa-check"></i> Système de réservation</li>
+                    <li><i class="fas fa-check"></i> Programme de fidélité</li>
+                    <li><i class="fas fa-check"></i> Support dédié</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function switchMethod(method, el) {
+            document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('card-form').style.display = method === 'card' ? 'block' : 'none';
+            document.getElementById('edinar-form').style.display = method === 'edinar' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

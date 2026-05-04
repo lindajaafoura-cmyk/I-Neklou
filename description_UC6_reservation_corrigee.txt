@@ -1,0 +1,75 @@
+CAS D'UTILISATION : RÉSERVER UNE TABLE
+
+Acteur principal : Utilisateur (Client)
+
+Pré-conditions :
+- L'utilisateur est authentifié
+- L'utilisateur consulte la fiche d'un restaurant
+
+Post-conditions :
+- Une réservation est créée avec statut "en attente"
+- Une fenêtre modale de confirmation avec récapitulatif est affichée
+- L'utilisateur est redirigé vers "Mon Compte" après 4 secondes
+- Le restaurant reçoit la demande de réservation
+
+ENCHAÎNEMENT NOMINAL :
+1. L'utilisateur clique sur "Réserver une table".
+2. Le système affiche un formulaire de réservation avec :
+   - Sélection de la date (à partir d'aujourd'hui)
+   - Sélection de l'heure parmi les créneaux disponibles
+   - Nombre de personnes (1-8)
+   - Nom complet (pré-rempli si utilisateur connecté)
+   - Téléphone (format tunisien)
+   - Demandes spéciales (optionnel)
+3. L'utilisateur remplit le formulaire.
+4. L'utilisateur soumet le formulaire.
+5. Le système valide les données côté client :
+   - Nom : 2-50 caractères, lettres seulement
+   - Téléphone : 8 chiffres, commence par 2,4,5,7,9
+   - Heure : doit être sélectionnée
+6. Le système enregistre la réservation avec statut "en attente".
+7. Le système affiche une fenêtre modale de confirmation avec récapitulatif.
+8. Après 4 secondes, le système redirige automatiquement vers "Mon Compte".
+
+ENCHAÎNEMENTS D'EXCEPTION :
+E1 : Champ obligatoire vide
+  1. Le système affiche un message d'erreur sous le champ concerné.
+  2. Retour à la saisie du formulaire.
+
+E2 : Format nom incorrect
+  1. Le système affiche "Le nom doit contenir entre 2 et 50 caractères (lettres seulement)".
+  2. Retour à la saisie du formulaire.
+
+E3 : Format téléphone incorrect
+  1. Le système affiche "Numéro invalide. 8 chiffres requis, commençant par 2,4,5,7 ou 9".
+  2. Retour à la saisie du formulaire.
+
+E4 : Heure non sélectionnée
+  1. Le système affiche "Veuillez sélectionner un créneau horaire".
+  2. Retour à la saisie du formulaire.
+
+ENCHAÎNEMENTS ALTERNATIFS :
+A1 : Créneau marqué "Complet"
+  1. Le système génère aléatoirement des créneaux "complets" (25% de chance).
+  2. L'utilisateur ne peut pas sélectionner ces créneaux.
+  3. L'utilisateur doit choisir un autre créneau disponible.
+
+A2 : Réservation acceptée par le restaurant
+  1. Le restaurant consulte la demande de réservation.
+  2. Le restaurant accepte la réservation.
+  3. Le statut passe à "confirmée".
+  4. L'utilisateur est notifié dans "Mon Compte" → "Réservations".
+
+A3 : Réservation refusée par le restaurant
+  1. Le restaurant consulte la demande de réservation.
+  2. Le restaurant refuse la réservation.
+  3. Le statut passe à "refusée".
+  4. L'utilisateur est notifié dans "Mon Compte" → "Réservations".
+
+NOTES IMPORTANTES :
+- La disponibilité des créneaux est simulée (25% de chance d'être "complet").
+- Le restaurant décide ultérieurement d'accepter ou refuser la réservation.
+- L'utilisateur peut suivre le statut de sa réservation dans "Mon Compte" → "Réservations".
+- Les créneaux pour aujourd'hui sont filtrés selon l'heure actuelle.
+- Une fiche récapitulative est affichée dans une modal avant redirection.
+- Redirection automatique après 4 secondes ou manuelle via bouton "Fermer".

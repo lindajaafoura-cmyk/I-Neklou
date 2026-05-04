@@ -1,0 +1,39 @@
+@startuml UC10-E1 – Modifier les données personnelles (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Modifier les données personnelles
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+ref over U, S : (Consulter l'espace compte)
+
+U -> S : 1 : Modifier les informations et valider
+S -> S : 2 : Vérifier les données
+
+alt [champ vide]
+    S --> U : 3 : Afficher un message d'erreur\nRecharger le formulaire avec les données originales
+else [format nom ou prénom incorrect]
+    S --> U : 3 : Afficher un message d'erreur\nRecharger le formulaire avec les données originales
+else [format email incorrect]
+    S --> U : 3 : Afficher un message d'erreur\nRecharger le formulaire avec les données originales
+else [email déjà utilisé]
+    S --> U : 3 : Afficher un message d'erreur\nRecharger le formulaire avec les données originales
+else [toutes les données sont valides]
+    S -> S : 4 : Mettre à jour le profil
+    S --> U : 5 : Afficher "Profil mis à jour avec succès"
+    S --> U : 6 : Redirection vers "Mon Compte"
+end
+
+@enduml

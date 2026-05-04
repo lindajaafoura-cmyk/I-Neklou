@@ -1,0 +1,32 @@
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+*.log
+local_settings.py
+media/
+
+# Environnements virtuels
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ── Fichiers d'essai / temporaires ──────────────────
+scripts/
+tmp_*.py
+seed_*.py
+final_sync_ids.py

@@ -1,0 +1,105 @@
+{% extends 'pages/admin-panel/base.html' %}
+{% load static %}
+
+{% block title %}Gestion des Restaurants - Administration{% endblock %}
+
+{% block page_icon %}<i class="fas fa-utensils"></i>{% endblock %}
+{% block page_title %}Gestion des Restaurants{% endblock %}
+
+{% block extra_css %}{% endblock %}
+
+{% block content %}
+<!-- Filtres -->
+<div class="filters-section">
+    <form method="GET" style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center; width: 100%;">
+        <div class="filter-group">
+            <label for="status">Statut :</label>
+            <select name="status" id="status">
+                <option value="">Tous</option>
+                <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>En attente</option>
+                <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Approuvé</option>
+                <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejeté</option>
+                <option value="suspended" {% if status_filter == 'suspended' %}selected{% endif %}>Suspendu</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="search">Recherche :</label>
+            <input type="text" name="search" id="search" placeholder="Nom, email, ville..." value="{{ search }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i> Filtrer
+        </button>
+
+        {% if status_filter or search %}
+        <a href="{% url 'admin_restaurants' %}" class="btn btn-outline">
+            <i class="fas fa-times"></i> Réinitialiser
+        </a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Statistiques par statut -->
+<div class="status-stats">
+    <div class="status-stat pending">
+        <div class="status-stat-number" id="stat-pending">0</div>
+        <div class="status-stat-label">En attente</div>
+    </div>
+    <div class="status-stat approved">
+        <div class="status-stat-number" id="stat-approved">0</div>
+        <div class="status-stat-label">Approuvés</div>
+    </div>
+    <div class="status-stat rejected">
+        <div class="status-stat-number" id="stat-rejected">0</div>
+        <div class="status-stat-label">Rejetés</div>
+    </div>
+    <div class="status-stat suspended">
+        <div class="status-stat-number" id="stat-suspended">0</div>
+        <div class="status-stat-label">Suspendus</div>
+    </div>
+</div>
+
+<!-- Liste des restaurants -->
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">
+            <i class="fas fa-list"></i>
+            Restaurants
+        </h2>
+    </div>
+
+    <div class="table-responsive">
+        <table id="restaurants-table">
+            <thead>
+                <tr>
+                    <th>Restaurant</th>
+                    <th>Email</th>
+                    <th>Ville</th>
+                    <th>Statut</th>
+                    <th>Paiement</th>
+                    <th>Note</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="restaurants-table-body">
+                <!-- Les données seront insérées ici par JavaScript -->
+                <tr>
+                    <td colspan="7" class="empty-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Chargement des restaurants...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const adminRestaurants = JSON.parse('{{ admin_restaurants_json|escapejs }}');
+</script>
+<script src="{% static 'admin/admin_restaurants.js' %}"></script>
+{% endblock %}

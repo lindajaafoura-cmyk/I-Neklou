@@ -1,0 +1,76 @@
+CAS D'UTILISATION : CONSULTER LES POINTS ET LE NIVEAU DE FIDÉLITÉ
+
+Acteur principal : Utilisateur (Client)
+
+Pré-conditions : L'utilisateur est connecté
+
+Post-conditions :
+- Le solde de points est affiché
+- Le niveau actuel est affiché
+- La barre de progression vers le niveau suivant est affichée
+- Les coupons disponibles sont listés
+- L'historique des transactions est affiché
+
+ENCHAÎNEMENT NOMINAL :
+1. L'utilisateur accède à la page "Fidélité".
+2. Le système affiche les sections suivantes :
+   - Carte des points : Points actuels, niveau, barre de progression
+   - Collecter des points : Formulaire pour saisir un code
+   - Niveaux : Présentation des 4 niveaux (Ekoul, Ekoul Kbir, Makhmekh, Makhmekh Kbir)
+   - Coupons disponibles : Récompenses échangeables selon les points
+   - Historique : Transactions passées (acquisition/dépense de points)
+   - Comment ça marche : Explication du programme
+3. L'utilisateur peut interagir avec chaque section.
+
+ENCHAÎNEMENTS ALTERNATIFS :
+A1 : Saisir un code de fidélité valide
+  1. L'utilisateur saisit un code dans le formulaire "Collecter mes points".
+  2. L'utilisateur valide le code.
+  3. Le système vérifie la validité du code.
+  4. Le système ajoute les points correspondants au compte.
+  5. Le système met à jour l'affichage des points et du niveau.
+  6. Le système affiche un message de confirmation.
+  7. Le système ajoute la transaction à l'historique.
+
+A2 : Consulter les coupons disponibles
+  1. L'utilisateur consulte la section "Mes coupons disponibles".
+  2. Le système affiche les coupons éligibles selon le nombre de points :
+     - 100+ points : Réduction de 10 DT
+     - 250+ points : Entrée offerte
+     - 500+ points : Plat offert
+     - 1000+ points : Menu dégustation
+  3. Si aucun coupon n'est disponible, le système affiche un message d'encouragement.
+
+A3 : Consulter l'historique des transactions
+  1. L'utilisateur consulte la section "Historique des points".
+  2. Le système affiche la liste chronologique des transactions.
+  3. Chaque transaction montre : description, date/heure, points (+/-).
+  4. Si l'historique est vide, le système affiche "Aucun historique".
+
+ENCHAÎNEMENTS D'EXCEPTION :
+E1 : Code de fidélité invalide
+  1. L'utilisateur saisit un code invalide.
+  2. Le système affiche "Code invalide. Veuillez réessayer."
+  3. Retour à la saisie du code.
+
+E2 : Code déjà utilisé
+  1. L'utilisateur saisit un code déjà utilisé.
+  2. Le système affiche "Vous avez déjà utilisé ce code !"
+  3. Retour à la saisie du code.
+
+E3 : Champ code vide
+  1. L'utilisateur tente de valider un champ vide.
+  2. Le système affiche une erreur de validation HTML.
+  3. Retour à la saisie du code.
+
+NOTES IMPORTANTES :
+- Niveaux de fidélité :
+  * Ekoul : 0–199 points
+  * Ekoul Kbir : 200–499 points
+  * Makhmekh : 500–999 points
+  * Makhmekh Kbir : 1000+ points
+- Barre de progression : Montre l'avancement vers le prochain niveau.
+- Coupons : Débloqués automatiquement selon le nombre de points.
+- Codes de test disponibles : DINETUNIS100 (100 pts), BIENVENUE50 (50 pts), REPAS2024 (30 pts), FIDELITE20 (20 pts).
+- Points totaux gagnés : Différent des points disponibles (certains peuvent être dépensés).
+- Transactions : Incluent l'acquisition de points via codes et la dépense pour coupons.

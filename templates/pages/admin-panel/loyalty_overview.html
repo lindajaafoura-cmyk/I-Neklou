@@ -1,0 +1,232 @@
+{% extends 'pages/admin-panel/base.html' %}
+{% load static %}
+
+{% block title %}Gestion des points fidélité - Administration{% endblock %}
+
+{% block page_icon %}<i class="fas fa-gift"></i>{% endblock %}
+{% block page_title %}Programme de fidélité{% endblock %}
+
+{% block extra_css %}{% endblock %}
+
+{% block content %}
+<!-- Statistiques globales -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.total_points }}</div>
+        <div class="stat-label">Points totaux</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.avg_points|floatformat:0 }}</div>
+        <div class="stat-label">Moyenne par utilisateur</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ stats.total_users }}</div>
+        <div class="stat-label">Utilisateurs avec points</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ transactions_count }}</div>
+        <div class="stat-label">Transactions totales</div>
+    </div>
+</div>
+
+<!-- Statistiques par niveau -->
+<div class="tier-stats">
+    <div class="tier-stat bronze">
+        <div class="tier-name">Bronze</div>
+        <div class="tier-count">{{ stats.tiers.bronze }}</div>
+    </div>
+    <div class="tier-stat silver">
+        <div class="tier-name">Argent</div>
+        <div class="tier-count">{{ stats.tiers.silver }}</div>
+    </div>
+    <div class="tier-stat gold">
+        <div class="tier-name">Or</div>
+        <div class="tier-count">{{ stats.tiers.gold }}</div>
+    </div>
+    <div class="tier-stat platinum">
+        <div class="tier-name">Platine</div>
+        <div class="tier-count">{{ stats.tiers.platinum }}</div>
+    </div>
+</div>
+
+<!-- Onglets de navigation -->
+<div class="admin-tabs">
+    <button id="tab-users" class="admin-tab active" onclick="afficherSectionFidelite('users', this)">Utilisateurs</button>
+    <button id="tab-transactions" class="admin-tab" onclick="afficherSectionFidelite('transactions', this)">Transactions</button>
+</div>
+
+<!-- Section Utilisateurs -->
+<div id="users-section" class="section-content">
+    <!-- Filtres utilisateurs -->
+    <div class="filters-section">
+        <form method="GET" id="user-filter-form">
+            <div class="filter-group">
+                <label for="tier">Niveau :</label>
+                <select name="tier" id="tier">
+                    <option value="">Tous</option>
+                    <option value="bronze" {% if tier_filter == 'bronze' %}selected{% endif %}>Bronze</option>
+                    <option value="silver" {% if tier_filter == 'silver' %}selected{% endif %}>Argent</option>
+                    <option value="gold" {% if tier_filter == 'gold' %}selected{% endif %}>Or</option>
+                    <option value="platinum" {% if tier_filter == 'platinum' %}selected{% endif %}>Platine</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="search">Recherche :</label>
+                <input type="text" name="search" id="search" placeholder="Nom, email..." value="{{ search }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+            {% if tier_filter or search %}
+            <a href="{% url 'admin_loyalty_overview' %}" class="btn btn-outline">Réinitialiser</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Liste des utilisateurs -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <i class="fas fa-users"></i>
+                Utilisateurs avec points fidélité
+            </h2>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Points</th>
+                        <th>Niveau</th>
+                        <th>Total gagnés</th>
+                        <th>Total utilisés</th>
+                        <th>Dernière mise à jour</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>
+                            <strong>{{ user.get_full_name|default:user.username }}</strong>
+                            <br>
+                            <small style="color: #A7B57A;">{{ user.email }}</small>
+                        </td>
+                        <td><strong>{{ user.loyalty.points }}</strong></td>
+                        <td>
+                            <span class="badge-tier {{ user.loyalty.tier }}">
+                                {{ user.loyalty.get_tier_display }}
+                            </span>
+                        </td>
+                        <td>{{ user.loyalty.total_points_earned }}</td>
+                        <td>{{ user.loyalty.total_points_used }}</td>
+                        <td>{{ user.loyalty.last_updated|date:"d/m/Y" }}</td>
+                        <td>
+                            <a href="{% url 'admin_loyalty_overview' %}?user_id={{ user.id }}#transactions"
+                                class="btn btn-sm btn-outline" onclick="showLoyaltySection('transactions')">
+                                <i class="fas fa-history"></i> Voir transactions
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <i class="fas fa-gift"></i>
+                            <p>Aucun utilisateur trouvé</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Section Transactions -->
+<div id="transactions-section" class="section-content" style="display: none;">
+    {% if target_user %}
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'admin_loyalty_overview' %}" class="btn btn-outline btn-sm">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
+        <span style="margin-left: 15px; font-weight: 600; color: #4A6B4D;">
+            Transactions de {{ target_user.get_full_name|default:target_user.username }}
+        </span>
+    </div>
+    {% endif %}
+
+    <!-- Filtres transactions -->
+    <div class="filters-section">
+        <form method="GET" id="transaction-filter-form">
+            {% if target_user %}
+            <input type="hidden" name="user_id" value="{{ target_user.id }}">
+            {% endif %}
+
+            <div class="filter-group">
+                <label for="type">Type de transaction :</label>
+                <select name="type" id="type">
+                    <option value="">Tous</option>
+                    <option value="earned" {% if transaction_type == 'earned' %}selected{% endif %}>Gagné</option>
+                    <option value="spent" {% if transaction_type == 'spent' %}selected{% endif %}>Dépensé</option>
+                    <option value="bonus" {% if transaction_type == 'bonus' %}selected{% endif %}>Bonus</option>
+                    <option value="expired" {% if transaction_type == 'expired' %}selected{% endif %}>Expiré</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+            {% if transaction_type %}
+            <a href="{% if target_user %}{% url 'admin_loyalty_overview' %}?user_id={{ target_user.id }}{% else %}{% url 'admin_loyalty_overview' %}{% endif %}"
+                class="btn btn-outline">
+                Réinitialiser
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Liste des transactions -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <i class="fas fa-list"></i>
+                Historique des transactions
+            </h2>
+        </div>
+
+        {% for transaction in transactions %}
+        <div class="transaction-item">
+            <div class="transaction-info">
+                {% if not target_user %}
+                <div class="transaction-user">
+                    {{ transaction.user.get_full_name|default:transaction.user.username }}
+                </div>
+                {% endif %}
+                <div class="transaction-desc">{{ transaction.description }}</div>
+                <div class="transaction-meta">
+                    <span>{{ transaction.created_at|date:"d/m/Y H:i" }}</span>
+                    <span class="badge badge-{{ transaction.transaction_type }}">
+                        {{ transaction.get_transaction_type_display }}
+                    </span>
+                </div>
+            </div>
+            <div
+                class="transaction-points {% if transaction.transaction_type == 'spent' or transaction.transaction_type == 'expired' %}points-negative{% else %}points-positive{% endif %}">
+                {% if transaction.transaction_type == 'spent' or transaction.transaction_type == 'expired' %}-{% else
+                %}+{% endif %}
+                {{ transaction.points }} pts
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <i class="fas fa-history"></i>
+            <p>Aucune transaction trouvée</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'admin/admin_loyalty.js' %}"></script>
+{% endblock %}

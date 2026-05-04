@@ -1,0 +1,37 @@
+@startuml UC8b – Consulter les favoris (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam sequenceBoxBorderColor #C48EA1
+skinparam sequenceBoxBackgroundColor #FDF0F5
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Consulter les favoris
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_Favoris" as UI
+control "Controller" as C
+entity "Favori" as DB
+
+ref over U, UI, C, DB : (S'authentifier)
+
+U -> UI : 1 : Accéder à "Mes Favoris"
+UI -> C : 2 : Demander la liste
+C -> DB : 3 : filter(user)
+DB --> C : 4 : Retourner la liste
+
+alt [aucun favori]
+    C --> UI : 5 : Afficher message "Aucun favori"
+else [favoris existants]
+    C --> UI : 5 : Transmettre la liste
+    UI --> U : 6 : Afficher les restaurants favoris
+end
+
+@enduml

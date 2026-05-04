@@ -1,0 +1,48 @@
+@startuml UC10-E3 – Modifier le mot de passe (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam sequenceBoxBorderColor #C48EA1
+skinparam sequenceBoxBackgroundColor #FDF0F5
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Modifier le mot de passe
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_Paramètres" as UI
+control "Controller" as C
+entity "Utilisateur" as DB
+
+ref over U, UI, C, DB : (S'authentifier)
+ref over U, UI, C, DB : (Consulter l'espace compte)
+
+U -> UI : 1 : Saisir l'ancien et le nouveau mot de passe
+UI -> C : 2 : Envoyer les données (POST)
+
+C -> C : 3 : Vérifier les données
+
+alt [champ vide]
+    C --> UI : 4 : Afficher un message d'erreur
+else [champs remplis]
+    alt [ancien mot de passe incorrect]
+        C -> DB : 4 : check_password()
+        C --> UI : 5 : Afficher un message d'erreur
+    else [ancien mot de passe correct]
+        alt [confirmation incorrecte]
+            C --> UI : 5 : Afficher un message d'erreur
+        else [confirmation correcte]
+            C -> DB : 5 : user.set_password()
+            C --> UI : 6 : Afficher "Mot de passe modifié"
+            UI --> U : 7 : Redirection vers "Mon Compte"
+        end
+    end
+end
+
+@enduml

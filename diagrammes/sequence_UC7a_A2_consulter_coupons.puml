@@ -1,0 +1,56 @@
+@startuml UC7a – A2 : Consulter les coupons disponibles (Diagramme de Séquence)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title A2 : Consulter les coupons disponibles
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+U -> S : 1 : Consulter la section "Mes coupons disponibles"
+S -> S : 2 : Vérifier le nombre de points de l'utilisateur
+
+alt [points >= 1000]
+    S --> U : 3 : Afficher les 4 coupons :
+    note right
+    -100 DT (100 pts)
+    -Entrée offerte (250 pts)
+    -Plat offert (500 pts)
+    -Menu dégustation (1000 pts)
+    end note
+else [points >= 500]
+    S --> U : 4 : Afficher 3 coupons :
+    note right
+    -100 DT (100 pts)
+    -Entrée offerte (250 pts)
+    -Plat offert (500 pts)
+    end note
+else [points >= 250]
+    S --> U : 5 : Afficher 2 coupons :
+    note right
+    -100 DT (100 pts)
+    -Entrée offerte (250 pts)
+    end note
+else [points >= 100]
+    S --> U : 6 : Afficher 1 coupon :
+    note right
+    -100 DT (100 pts)
+    end note
+else [points < 100]
+    S --> U : 7 : Afficher message d'encouragement
+    note right
+    "Accumulez 100 points pour
+    débloquer votre premier coupon"
+    end note
+end
+
+@enduml

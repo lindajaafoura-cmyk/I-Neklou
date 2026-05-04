@@ -1,0 +1,48 @@
+@startuml UC8b – Consulter les favoris (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Consulter les favoris
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+
+U -> S : 1 : Accéder à la page "Mes Favoris"
+S -> S : 2 : Récupérer la liste des restaurants favoris
+
+alt [aucun favori]
+    S --> U : 3 : Afficher message "Aucun restaurant favori"
+    S --> U : 4 : Proposer bouton "Découvrir les restaurants"
+else [favoris existants]
+    S --> U : 3 : Afficher la liste des restaurants favoris\n(avec filtres par catégorie)
+    
+    opt [filtrer par catégorie]
+        U -> S : 4 : Sélectionner une catégorie\n(Tous, Tunisienne, Italienne, Autres)
+        S --> U : 5 : Afficher les favoris filtrés
+    end
+    
+    opt [retirer un favori]
+        U -> S : 6 : Cliquer sur l'icône cœur
+        S -> S : 7 : Retirer le restaurant des favoris
+        S --> U : 8 : Masquer la carte avec animation
+        S --> U : 9 : Afficher notification "Restaurant retiré des favoris"
+    end
+    
+    opt [voir détails]
+        U -> S : 10 : Cliquer sur "Voir les détails"
+        S --> U : 11 : Redirection vers la page détails du restaurant
+    end
+end
+
+@enduml

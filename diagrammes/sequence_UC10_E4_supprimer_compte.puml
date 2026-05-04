@@ -1,0 +1,48 @@
+@startuml UC10-E4 – Supprimer le compte (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Supprimer le compte
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+ref over U, S : (Consulter l'espace compte)
+
+U -> S : 1 : Cliquer sur "Paramètres"
+activate S
+S --> U : 2 : Afficher la page Paramètres
+deactivate S
+
+U -> S : 3 : Cliquer sur "Supprimer mon compte"
+activate S
+S --> U : 4 : Afficher une demande de confirmation
+deactivate S
+
+alt [annuler]
+    U -> S : 5 : Cliquer sur "Annuler"
+    activate S
+    S --> U : 6 : Rester sur la page Paramètres
+    deactivate S
+else [confirmer]
+    U -> S : 5 : Cliquer sur "Confirmer"
+    activate S
+    S -> S : 6 : Supprimer le compte
+    activate S
+    S --> S : 7 : Compte supprimé
+    deactivate S
+    S --> U : 8 : Déconnecter et rediriger vers la page d'accueil
+    deactivate S
+end
+
+@enduml

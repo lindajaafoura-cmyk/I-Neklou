@@ -1,0 +1,48 @@
+@startuml UC10-E1 – Modifier les données personnelles (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam sequenceBoxBorderColor #C48EA1
+skinparam sequenceBoxBackgroundColor #FDF0F5
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Modifier les données personnelles
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_MonCompte" as UI
+control "Controller" as C
+entity "Utilisateur" as DB
+
+ref over U, UI, C, DB : (S'authentifier)
+ref over U, UI, C, DB : (Consulter l'espace compte)
+
+U -> UI : 1 : Modifier les informations et valider
+UI -> C : 2 : Envoyer les données (POST)
+
+C -> C : 3 : Vérifier les données
+
+alt [champ vide]
+    C --> UI : 4 : Afficher un message d'erreur
+else [champs remplis]
+    alt [format nom ou prénom incorrect]
+        C --> UI : 5 : Afficher un message d'erreur
+    else [format email incorrect]
+        C --> UI : 5 : Afficher un message d'erreur
+    else [email déjà utilisé]
+        C -> DB : 5 : filter(email)
+        C --> UI : 6 : Afficher un message d'erreur
+    else [données valides]
+        C -> DB : 5 : user.save()
+        C --> UI : 6 : Afficher "Profil mis à jour avec succès"
+        UI --> U : 7 : Redirection vers "Mon Compte"
+    end
+end
+
+@enduml

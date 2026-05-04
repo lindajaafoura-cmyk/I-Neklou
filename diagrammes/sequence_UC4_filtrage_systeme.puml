@@ -1,0 +1,36 @@
+@startuml UC4 – Filtrer les restaurants (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Filtrer les restaurants
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+
+U -> S : 1 : Accéder à la page d'accueil
+S --> U : 2 : Afficher la liste des restaurants et les filtres disponibles
+
+U -> S : 3 : Sélectionner un ou plusieurs critères\n(ville / cuisine / budget / note)
+S -> S : 4 : Appliquer les filtres
+
+alt [aucun résultat]
+    S --> U : 5 : Afficher "Aucun restaurant trouvé"
+else [résultats trouvés]
+    S --> U : 5 : Afficher la liste filtrée
+end
+
+U -> S : 6 : Cliquer sur "Réinitialiser"
+S --> U : 7 : Afficher tous les restaurants
+
+@enduml

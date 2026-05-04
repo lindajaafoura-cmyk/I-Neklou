@@ -1,0 +1,40 @@
+@startuml UC8a – Mettre en favoris (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam sequenceBoxBorderColor #C48EA1
+skinparam sequenceBoxBackgroundColor #FDF0F5
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Mettre en favoris
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_Accueil" as UI
+control "Controller" as C
+entity "Favori" as DB
+
+ref over U, UI, C, DB : (S'authentifier)
+
+U -> UI : 1 : Cliquer sur l'icône cœur
+UI -> C : 2 : Envoyer restaurant_id (POST)
+
+C -> DB : 3 : get_or_create(user, restaurant_id)
+DB --> C : 4 : Retourner (favori, created)
+
+alt [déjà en favori]
+    C -> DB : 5 : favorite.delete()
+    C --> UI : 6 : Retourner status "removed"
+    UI --> U : 7 : Mettre à jour l'icône (cœur vide)
+else [pas encore en favori]
+    C --> UI : 5 : Retourner status "added"
+    UI --> U : 6 : Mettre à jour l'icône (cœur plein)
+end
+
+@enduml

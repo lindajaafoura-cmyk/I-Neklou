@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Administration - I-Neklou{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'admin/admin.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <div class="admin-container">
+
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <a href="{% url 'admin_dash' %}" class="logo">
+                    <i class="fas fa-utensils"></i>I-Neklou
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Principal</div>
+                    <a href="{% url 'admin_dashboard_stats' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_dashboard_stats' %}active{% endif %}">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard & Stats</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Gestion</div>
+                    <a href="{% url 'admin_restaurants' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_restaurants' %}active{% endif %}">
+                        <i class="fas fa-utensils"></i>
+                        <span>Restaurants</span>
+                    </a>
+                    <a href="{% url 'admin_users' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
+                        <i class="fas fa-users"></i>
+                        <span>Utilisateurs</span>
+                    </a>
+                    <a href="{% url 'admin_reviews' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_reviews' %}active{% endif %}">
+                        <i class="fas fa-star"></i>
+                        <span>Avis</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Fidélité</div>
+                    <a href="{% url 'admin_loyalty_overview' %}" class="nav-item {% if request.resolver_match.url_name == 'admin_loyalty_overview' %}active{% endif %}">
+                        <i class="fas fa-gift"></i>
+                        <span>Programme fidélité</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Système</div>
+                    <a href="{% url 'index' %}" class="nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Accueil</span>
+                    </a>
+                    <a href="{% url 'logout' %}" class="nav-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Déconnexion</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <h1 class="page-title">
+                    {% block page_icon %}<i class="fas fa-chart-line"></i>{% endblock %}
+                    {% block page_title %}Administration{% endblock %}
+                </h1>
+                <div class="admin-profile">
+                    <div class="profile-pic">{{ user.first_name|first|upper }}</div>
+                    <div class="profile-info">
+                        <div class="profile-name">{{ user.first_name|default:user.username }}</div>
+                        <div class="profile-role">Administrateur</div>
+                    </div>
+                </div>
+            </div>
+
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% else %}check-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

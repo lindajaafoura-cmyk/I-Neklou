@@ -1,0 +1,36 @@
+@startuml UC9 – Gérer la fidélité (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Gérer la fidélité
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+
+U -> S : 1 : Accéder à la page "Fidélité"
+S --> U : 2 : Afficher les points, le niveau,\nla progression et l'historique
+
+U -> S : 3 : Saisir un code fidélité et valider
+S -> S : 4 : Vérifier le code
+
+alt [code invalide]
+    S --> U : 5 : Afficher message "Code invalide"
+else [code déjà utilisé]
+    S --> U : 5 : Afficher message "Code déjà utilisé"
+else [code valide]
+    S -> S : 6 : Ajouter les points et mettre à jour le niveau
+    S --> U : 7 : Afficher message de succès\net mettre à jour l'affichage
+end
+
+@enduml

@@ -1,0 +1,27 @@
+@startuml UC10-E5 – Consulter les paramètres (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Consulter les paramètres
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+ref over U, S : (Consulter l'espace compte)
+
+U -> S : 1 : Cliquer sur "Paramètres"
+activate S
+S --> U : 2 : Afficher la page Paramètres\n(modifier mot de passe — supprimer compte)
+deactivate S
+
+@enduml

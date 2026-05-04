@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation - I-Neklou</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'user/styles.css' %}?v={% now 'U' %}">
+    <link rel="stylesheet" href="{% static 'user/reservation.css' %}?v={% now 'U' %}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo-container">
+                    <a href="{% url 'index' %}" class="logo-link">
+                        <i class="fas fa-utensils logo-icon"></i>
+                        <span class="logo-text">-Neklou</span>
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="{% url 'index' %}">Accueil</a></li>
+                    <li><a href="{% url 'favorites' %}">Favoris</a></li>
+                    <li><a href="{% url 'loyalty' %}">Fidélité</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'mon_compte' %}" class="btn btn-outline">
+                        <i class="fas fa-user-circle"></i> {{ user.first_name|default:user.username }}
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-primary">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </a>
+                    {% else %}
+                    <a href="{% url 'auth' %}" class="btn btn-outline">Connexion</a>
+                    <a href="{% url 'auth' %}" class="btn btn-primary">S'inscrire</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="reserve">
+        <div class="reserve-header">
+            <p class="reserve-hero-eyebrow">Book. Eat. Rate.</p>
+            <h2>Réserver une <em>table</em></h2>
+            <p>Sélectionnez vos détails et nous ferons notre possible pour vous satisfaire.</p>
+            <div class="reserve-icons">
+                <div class="reserve-icon"><i class="fas fa-utensils"></i></div>
+                <div class="reserve-icon"><i class="fas fa-gift"></i></div>
+                <div class="reserve-icon"><i class="fas fa-concierge-bell"></i></div>
+            </div>
+        </div>
+
+        <div class="reserve-grid-wrapper">
+                <div class="reserve-form-side">
+                    <h3 id="restaurantTitleHeader">Votre <em>réservation</em></h3>
+                    <p>Sélectionnez vos détails et nous ferons notre possible pour satisfaire votre demande.</p>
+                    <form id="reservationForm" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="guests">Combien de personnes ?</label>
+                                <select name="guests" id="guests" class="form-control">
+                                    <option value="1">1 personne</option>
+                                    <option value="2" selected>2 personnes</option>
+                                    <option value="3">3 personnes</option>
+                                    <option value="4">4 personnes</option>
+                                    <option value="5">5 personnes</option>
+                                    <option value="6">6 personnes</option>
+                                    <option value="7">7 personnes</option>
+                                    <option value="8">8 personnes</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="date">Quelle est votre date ?</label>
+                                <input type="date" id="date" name="date" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="time">Heure</label>
+                                <select name="time" id="time" class="form-control" required>
+                                    <option value="">--:-- --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Nom</label>
+                                <input type="text" id="name" name="name" class="form-control" placeholder="Votre nom complet" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-mail</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Votre adresse e-mail">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Téléphone</label>
+                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="Votre téléphone" required>
+                            </div>
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label for="special_requests">Demandes spéciales (allergies, préférences…)</label>
+                                <textarea id="special_requests" name="special_requests" class="form-control" rows="3" placeholder="Ex : allergie aux noix, table en terrasse, anniversaire…"></textarea>
+                            </div>
+                        </div>
+                        <div class="submit-container">
+                            <button type="submit" class="btn-submit">CONFIRMER LA RÉSERVATION</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="reserve-image-side">
+                    <img id="restaurantFullImage" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Photo du restaurant">
+                    <div class="restaurant-info-box">
+                        <h3 id="sideRestaurantName">{{ restaurant_name }}</h3>
+                        <p id="sideRestaurantDesc">Vivez une expérience gastronomique inoubliable avec I-Neklou.</p>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-icon">✓</div>
+            <div class="modal-title">Réservation confirmée !</div>
+            <div class="modal-details">
+                <div class="modal-detail-row">
+                    <span class="modal-detail-label">Restaurant</span>
+                    <span class="modal-detail-value" id="modal-restaurant"></span>
+                </div>
+                <div class="modal-detail-row">
+                    <span class="modal-detail-label">Nom</span>
+                    <span class="modal-detail-value" id="modal-nom"></span>
+                </div>
+                <div class="modal-detail-row">
+                    <span class="modal-detail-label">Téléphone</span>
+                    <span class="modal-detail-value" id="modal-telephone"></span>
+                </div>
+                <div class="modal-detail-row">
+                    <span class="modal-detail-label">Date</span>
+                    <span class="modal-detail-value" id="modal-date"></span>
+                </div>
+                <div class="modal-detail-row">
+                    <span class="modal-detail-label">Heure</span>
+                    <span class="modal-detail-value" id="modal-heure"></span>
+                </div>
+                <div class="modal-detail-row">
+                    <span class="modal-detail-label">Personnes</span>
+                    <span class="modal-detail-value" id="modal-personnes"></span>
+                </div>
+                <div class="modal-detail-row" id="modal-demandes-row" style="display:none;">
+                    <span class="modal-detail-label">Demandes spéciales</span>
+                    <span class="modal-detail-value" id="modal-demandes"></span>
+                </div>
+            </div>
+            <button class="modal-close" id="btnFermerModal">Fermer</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>I-Neklou — Votre guide gastronomique en Tunisie</p>
+        </div>
+    </footer>
+    <script>
+        const dbRestaurant = JSON.parse('{{ db_restaurant|escapejs }}');
+    </script>
+    <script defer src="{% static 'user/reservation.js' %}?v={% now 'U' %}"></script>
+</body>
+
+</html>

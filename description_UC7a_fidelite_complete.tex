@@ -1,0 +1,119 @@
+\subsubsection{UC7a – Consulter les points et le niveau (description textuelle complète)}
+\begin{longtable}{|p{5cm}|p{11cm}|}
+\hline
+Cas d'utilisation & Consulter les points et le niveau de fidélité \\ 
+\hline
+Acteur principal & Utilisateur (Client) \\ 
+\hline
+Pré-conditions & L'utilisateur est connecté \\ 
+\hline
+Post-conditions & 
+\begin{itemize}
+\setlength{\itemsep}{2pt}
+\item Le solde de points est affiché
+\item Le niveau actuel est affiché
+\item La barre de progression vers le niveau suivant est affichée
+\item Les coupons disponibles sont listés
+\item L'historique des transactions est affiché
+\end{itemize} \\ 
+\hline
+\textbf{Enchaînement nominal} &
+\begin{minipage}{\linewidth}
+\begin{enumerate}
+\setlength{\itemsep}{2pt}
+\item L'utilisateur accède à la page "Fidélité".
+\item Le système affiche les sections suivantes :
+  \begin{itemize}
+  \item \textbf{Carte des points} : Points actuels, niveau, barre de progression
+  \item \textbf{Collecter des points} : Formulaire pour saisir un code
+  \item \textbf{Niveaux} : Présentation des 4 niveaux (Ekoul, Ekoul Kbir, Makhmekh, Makhmekh Kbir)
+  \item \textbf{Coupons disponibles} : Récompenses échangeables selon les points
+  \item \textbf{Historique} : Transactions passées (acquisition/dépense de points)
+  \item \textbf{Comment ça marche} : Explication du programme
+  \end{itemize}
+\item L'utilisateur peut interagir avec chaque section.
+\end{enumerate}
+\end{minipage} \\ 
+\hline
+\textbf{Enchaînements alternatifs} &
+\begin{minipage}{\linewidth}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\item \textbf{A1 : Saisir un code de fidélité valide}
+\begin{enumerate}
+\item L'utilisateur saisit un code dans le formulaire "Collecter mes points".
+\item L'utilisateur valide le code.
+\item Le système vérifie la validité du code.
+\item Le système ajoute les points correspondants au compte.
+\item Le système met à jour l'affichage des points et du niveau.
+\item Le système affiche un message de confirmation.
+\item Le système ajoute la transaction à l'historique.
+\end{enumerate}
+\item \textbf{A2 : Consulter les coupons disponibles}
+\begin{enumerate}
+\item L'utilisateur consulte la section "Mes coupons disponibles".
+\item Le système affiche les coupons éligibles selon le nombre de points :
+  \begin{itemize}
+  \item 100+ points : Réduction de 10 DT
+  \item 250+ points : Entrée offerte
+  \item 500+ points : Plat offert
+  \item 1000+ points : Menu dégustation
+  \end{itemize}
+\item Si aucun coupon n'est disponible, le système affiche un message d'encouragement.
+\end{enumerate}
+\item \textbf{A3 : Consulter l'historique des transactions}
+\begin{enumerate}
+\item L'utilisateur consulte la section "Historique des points".
+\item Le système affiche la liste chronologique des transactions.
+\item Chaque transaction montre : description, date/heure, points (+/-).
+\item Si l'historique est vide, le système affiche "Aucun historique".
+\end{enumerate}
+\end{itemize}
+\end{minipage} \\ 
+\hline
+\textbf{Enchaînements d'exception} &
+\begin{minipage}{\linewidth}
+\begin{itemize}
+\setlength{\itemsep}{3pt}
+\item \textbf{E1 : Code de fidélité invalide}
+\begin{enumerate}
+\item L'utilisateur saisit un code invalide.
+\item Le système affiche "Code invalide. Veuillez réessayer."
+\item Retour à la saisie du code.
+\end{enumerate}
+\item \textbf{E2 : Code déjà utilisé}
+\begin{enumerate}
+\item L'utilisateur saisit un code déjà utilisé.
+\item Le système affiche "Vous avez déjà utilisé ce code !"
+\item Retour à la saisie du code.
+\end{enumerate}
+\item \textbf{E3 : Champ code vide}
+\begin{enumerate}
+\item L'utilisateur tente de valider un champ vide.
+\item Le système affiche une erreur de validation HTML.
+\item Retour à la saisie du code.
+\end{enumerate}
+\end{itemize}
+\end{minipage} \\ 
+\hline
+\textbf{Notes importantes} &
+\begin{minipage}{\linewidth}
+\begin{itemize}
+\setlength{\itemsep}{2pt}
+\item \textbf{Niveaux de fidélité} :
+  \begin{itemize}
+  \item Ekoul : 0–199 points
+  \item Ekoul Kbir : 200–499 points
+  \item Makhmekh : 500–999 points
+  \item Makhmekh Kbir : 1000+ points
+  \end{itemize}
+\item \textbf{Barre de progression} : Montre l'avancement vers le prochain niveau.
+\item \textbf{Coupons} : Débloqués automatiquement selon le nombre de points.
+\item \textbf{Codes de test disponibles} : DINETUNIS100 (100 pts), BIENVENUE50 (50 pts), REPAS2024 (30 pts), FIDELITE20 (20 pts).
+\item \textbf{Points totaux gagnés} : Différent des points disponibles (certains peuvent être dépensés).
+\item \textbf{Transactions} : Incluent l'acquisition de points via codes et la dépense pour coupons.
+\end{itemize}
+\end{minipage} \\ 
+\hline
+\caption{Description textuelle complète – Consulter les points et le niveau de fidélité}
+\end{longtable}

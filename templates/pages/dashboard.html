@@ -1,0 +1,389 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Restaurant - I-Neklou</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'restaurant/dashboard.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body data-logout-url="{% url 'logout' %}">
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">I-Neklou</div>
+                <div class="resto-badge" id="restaurantBadge">
+                    <i class="fas fa-store"></i>
+                    <span id="restaurantName">Chargement...</span>
+                </div>
+                <div class="resto-meta" id="restaurantMeta">
+                    <span id="restaurantLocation"><i class="fas fa-map-pin"></i> Chargement...</span>
+                    <span id="restaurantPhone"><i class="fas fa-phone"></i> Chargement...</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-section="avis">
+                    <i class="fas fa-star"></i>
+                    <span>Avis</span>
+                </div>
+                <div class="nav-item" data-section="reservations">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Réservations</span>
+                </div>
+                <div class="nav-item" data-section="menu">
+                    <i class="fas fa-utensils"></i>
+                    <span>Menu & Horaires</span>
+                </div>
+                <div class="nav-item" data-section="parametres">
+                    <i class="fas fa-cog"></i>
+                    <span>Paramètres</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ===== CONTENU PRINCIPAL ===== -->
+        <main class="main-content">
+            <!-- ===== TOP BAR ===== -->
+            <div class="top-bar">
+                <h1 class="page-title" id="pageTitle">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </h1>
+
+                <div style="display: flex; align-items: center;">
+                    <!-- NOTIFICATIONS -->
+                    <div class="notification-badge" onclick="toggleNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge-count" id="notificationCount">4</span>
+                    </div>
+
+                    <!-- BOUTON DECONNEXION -->
+                    <button class="btn-logout" onclick="deconnexion()">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== PANNEAU DE NOTIFICATIONS ===== -->
+            <div class="notifications-panel" id="notificationsPanel">
+                <div class="notifications-header">
+                    <h3>Notifications</h3>
+                    <button class="mark-read-btn" onclick="toutMarquerLu()">Tout marquer lu</button>
+                </div>
+                <div class="notifications-list" id="notificationsList">
+                </div>
+            </div>
+
+            <div id="dashboard-section" class="content-section active">
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon"><i class="fas fa-star"></i></div>
+                            <span class="stat-change" id="ratingChange"><i class="fas fa-arrow-up"></i> +0.2</span>
+                        </div>
+                        <div class="stat-value" id="avgRating">4.8</div>
+                        <div class="stat-label">Note moyenne</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                            <span class="stat-change" id="occupancyChange" style="color: #4CAF50;"><i
+                                    class="fas fa-percentage"></i> 0%</span>
+                        </div>
+                        <div class="stat-value" id="occupancyRate">...</div>
+                        <div class="stat-label">Taux d'occupation</div>
+                    </div>
+
+
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                            <span class="stat-change" id="loyaltyChange"><i class="fas fa-arrow-up"></i> 0</span>
+                        </div>
+                        <div class="stat-value" id="loyaltyCount">...</div>
+                        <div class="stat-label">Clients fidèles</div>
+                    </div>
+                </div>
+
+                <div class="bi-charts-grid">
+                    <div class="chart-card large">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-area"></i> Performance & Croissance</h3>
+                            <div class="chart-actions">
+                                <button class="btn-chart-range active">7 jours</button>
+                                <button class="btn-chart-range">30 jours</button>
+                            </div>
+                        </div>
+                        <div class="chart-container main-chart">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-clock"></i> Heures de pointe</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="peakHoursChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-pie-chart"></i> Mix Clients</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="customerMixChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="avis-section" class="content-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2><i class="fas fa-star"></i> Tous les avis</h2>
+                        <button class="btn-add" onclick="exportReviews()"><i class="fas fa-download"></i>
+                            Exporter</button>
+                    </div>
+
+                    <div class="reviews-grid" id="allReviews">
+                    </div>
+                </div>
+            </div>
+
+            <div id="reservations-section" class="content-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2><i class="fas fa-calendar-check"></i> Réservations à venir</h2>
+                    </div>
+                    <div class="reservations-list" id="reservationsList">
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="menu-section" class="content-section">
+                <!-- MENU SECTION AVEC HORAIRES, GALERIE ET PROMOTIONS INTÉGRÉES -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2><i class="fas fa-utensils"></i> Menu & Horaires</h2>
+                    </div>
+
+                    <!-- ONGLETS -->
+                    <div class="menu-tabs">
+                        <button class="menu-tab active" data-tab="menu-tab" onclick="switchMenuTab('menu-tab', this)">
+                            <i class="fas fa-utensils"></i> Menu
+                        </button>
+                        <button class="menu-tab" data-tab="hours-tab" onclick="switchMenuTab('hours-tab', this)">
+                            <i class="fas fa-clock"></i> Horaires
+                        </button>
+                        <button class="menu-tab" data-tab="gallery-tab" onclick="switchMenuTab('gallery-tab', this)">
+                            <i class="fas fa-images"></i> Galerie
+                        </button>
+                        <button class="menu-tab" data-tab="promotions-tab" onclick="switchMenuTab('promotions-tab', this)">
+                            <i class="fas fa-tags"></i> Promotions
+                        </button>
+                    </div>
+
+                    <!-- CONTENU ONGLET MENU -->
+                    <div id="menu-tab" class="menu-tab-content active">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="font-size: 16px; color: var(--dark);">Gestion du menu</h3>
+                            <button class="btn-add" onclick="showAddMenuItemModal()"><i class="fas fa-plus"></i> Ajouter un plat</button>
+                        </div>
+
+                        <div class="menu-categories" id="menuCategories">
+                            <button class="category-tab active" onclick="filterMenu('Tous')">Tous</button>
+                        </div>
+
+                        <div class="menu-items-grid" id="menuItems">
+                        </div>
+                    </div>
+
+                    <!-- CONTENU ONGLET HORAIRES -->
+                    <div id="hours-tab" class="menu-tab-content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="font-size: 16px; color: var(--dark);">Horaires d'ouverture</h3>
+                            <button class="btn-add" onclick="editHours()"><i class="fas fa-edit"></i> Modifier</button>
+                        </div>
+                        <div class="hours-grid" id="hoursGrid">
+                        </div>
+                    </div>
+
+                    <!-- CONTENU ONGLET GALERIE -->
+                    <div id="gallery-tab" class="menu-tab-content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="font-size: 16px; color: var(--dark);">Galerie photos</h3>
+                            <button class="btn-add" onclick="uploadPhotos()"><i class="fas fa-plus"></i> Ajouter une photo</button>
+                        </div>
+                        <div class="gallery-grid" id="gallery">
+                        </div>
+                    </div>
+
+                    <!-- CONTENU ONGLET PROMOTIONS -->
+                    <div id="promotions-tab" class="menu-tab-content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="font-size: 16px; color: var(--dark);">Promotions actives</h3>
+                            <button class="btn-add" onclick="showAddPromoModal()"><i class="fas fa-plus"></i> Nouvelle promotion</button>
+                        </div>
+                        <div class="promotions-grid" id="promotionsList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="parametres-section" class="content-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2><i class="fas fa-cog"></i> Paramètres du restaurant</h2>
+                    </div>
+
+                    <form class="settings-form" id="settingsForm" onsubmit="saveSettings(event)">
+                        <div class="form-group">
+                            <label>Nom du restaurant</label>
+                            <input type="text" id="settingsName" value="El Mida">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea rows="4"
+                                id="settingsDescription">Bienvenue chez El Mida, où la tradition tunisienne rencontre la modernité culinaire.</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Téléphone</label>
+                            <input type="tel" id="settingsPhone" value="+216 71 234 567">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="settingsEmail" value="info@elmida.tn">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Adresse</label>
+                            <input type="text" id="settingsAddress" value="Avenue de la Marsa, La Marsa, Tunis">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Type de cuisine</label>
+                            <select id="settingsCuisine">
+                                <option selected>Tunisienne</option>
+                                <option>Italienne</option>
+                                <option>Française</option>
+                                <option>Méditerranéenne</option>
+                                <option>International</option>
+                                <option>Asiatique</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Prix moyen</label>
+                            <select id="settingsPrice">
+                                <option value="$">$ (Moins de 30 DT)</option>
+                                <option value="$$">$$ (30-80 DT)</option>
+                                <option value="$$$" selected>$$$ (80-150 DT)</option>
+                                <option value="$$$$">$$$$ (150+ DT)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-save"></i> Enregistrer les modifications
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modalContent">
+        </div>
+    </div>
+
+    <!-- ===== CHAT BOX FLOTTANT ===== -->
+    <div id="live-chat">
+        <header class="clearfix">
+            <a href="#" class="chat-close">✕</a>
+            <h4>Support I-Neklou</h4>
+            <span class="chat-message-counter" id="unreadCount">0</span>
+        </header>
+
+        <div class="chat">
+            <div class="chat-history" id="chatHistory">
+                {% for msg in support_messages %}
+                <div class="chat-message {% if msg.is_from_admin %}from-admin{% else %}from-user{% endif %} clearfix">
+                    <div class="chat-message-content clearfix">
+                        <span class="chat-time">{{ msg.created_at|date:"H:i" }}</span>
+                        <h5>{% if msg.is_from_admin %}Administration{% else %}Vous{% endif %}</h5>
+                        <p>{{ msg.message }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div style="text-align: center; padding: 30px 20px; color: #999;">
+                    <p><i class="fas fa-comments" style="font-size: 24px; margin-bottom: 10px; display: block;"></i> Aucun message</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <p class="chat-feedback" id="typingIndicator" style="display: none;">Administration écrit...</p>
+
+            <form method="POST" action="{% url 'dashboard' %}" id="supportForm" class="support-form">
+                {% csrf_token %}
+                <fieldset>
+                    <input type="text" name="support_message" id="messageInput" placeholder="Votre message..." autofocus>
+                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script defer src="{% static 'restaurant/dashboard.js' %}?v={% now 'U' %}"></script>
+    <script>
+        $(document).ready(function() {
+            // Toggle chat window
+            $('#live-chat header').on('click', function() {
+                $('.chat').slideToggle(300, 'swing');
+                $('#unreadCount').fadeToggle(300, 'swing');
+            });
+
+            // Close chat
+            $('.chat-close').on('click', function(e) {
+                e.preventDefault();
+                $('#live-chat').fadeOut(300);
+            });
+
+            // Auto-scroll chat to bottom
+            function scrollChatToBottom() {
+                var chatHistory = $('#chatHistory');
+                chatHistory.scrollTop(chatHistory.prop('scrollHeight'));
+            }
+            scrollChatToBottom();
+
+            // Handle form submission
+            $('#supportForm').on('submit', function(e) {
+                // Let the form submit normally to Django
+            });
+        });
+    </script>
+</body>
+
+</html>

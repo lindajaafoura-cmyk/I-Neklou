@@ -1,0 +1,43 @@
+@startuml UC3 – Rechercher un restaurant (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Rechercher un restaurant\n(Diagramme de Séquence Détaillé)
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_Accueil" as UI
+control "Controller" as C
+entity "Restaurant" as DB
+
+U -> UI : 1 : Accéder à la page d'accueil()
+UI -> C : 2 : GET /
+C -> DB : 3 : Récupérer tous les restaurants\n(status = 'approved')
+DB --> C : 4 : Retourner la liste des restaurants
+C --> UI : 5 : Retourner index.html\n(liste des restaurants)
+UI --> U : 6 : Afficher la liste des restaurants
+
+U -> UI : 7 : Saisir un mot-clé\ndans la barre de recherche
+UI -> UI : 8 : filterRestaurants()\n(traitement côté client)
+
+note over UI
+  Le filtrage s'effectue en JavaScript
+  directement sur les cartes HTML affichées.
+  Aucune requête serveur n'est envoyée.
+end note
+
+alt [aucune carte ne correspond au mot-clé]
+    UI --> U : 9 : Afficher "Aucun restaurant trouvé\npour ces critères"
+else [des cartes correspondent]
+    UI --> U : 9 : Afficher les cartes filtrées\net le compteur de résultats
+end
+
+@enduml

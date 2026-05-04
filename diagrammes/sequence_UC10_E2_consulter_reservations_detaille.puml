@@ -1,0 +1,38 @@
+@startuml UC10-E2 – Consulter mes réservations (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam sequenceBoxBorderColor #C48EA1
+skinparam sequenceBoxBackgroundColor #FDF0F5
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Consulter mes réservations
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_MonCompte" as UI
+control "Controller" as C
+entity "Réservation" as DB
+
+ref over U, UI, C, DB : (S'authentifier)
+ref over U, UI, C, DB : (Consulter l'espace compte)
+
+U -> UI : 1 : Consulter la section "Mes Réservations"
+UI -> C : 2 : Demander les réservations
+C -> DB : 3 : filter(user_id)
+DB --> C : 4 : Retourner la liste
+
+alt [aucune réservation]
+    C --> UI : 5 : Afficher "Aucune réservation trouvée"
+else [réservations existantes]
+    C --> UI : 5 : Transmettre la liste
+    UI --> U : 6 : Afficher la liste des réservations
+end
+
+@enduml

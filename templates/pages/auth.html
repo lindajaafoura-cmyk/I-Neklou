@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I-Neklou - Connexion & Inscription</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'user/auth.css' %}">
+</head>
+<body>
+
+<a href="{% url 'index' %}" class="back-home">← Retour à l'accueil</a>
+
+<div class="auth-wrapper">
+
+    <!-- TYPE SELECTOR -->
+    <div class="type-selector">
+        <button class="type-btn active" id="userType">Utilisateur</button>
+        <button class="type-btn" id="restaurantType">Restaurant</button>
+    </div>
+
+    <!-- PANNEAU PRINCIPAL avec système de slide -->
+    <div class="auth-container" id="authContainer">
+        
+        <!-- FORMULAIRE CONNEXION -->
+        <div class="form-container sign-in-container">
+            <form action="{% url 'auth' %}" method="POST">
+                {% csrf_token %}
+                <h1>Se <em>connecter</em></h1>
+                <div class="field">
+                    <input type="email" name="email" placeholder="Adresse email" required />
+                </div>
+                <div class="field">
+                    <input type="password" name="password" placeholder="Mot de passe" required />
+                </div>
+                <input type="hidden" name="user_type" id="login_user_type" value="user" />
+                <button type="submit">Connexion</button>
+                <p class="mobile-switch">Pas encore de compte ? <a href="javascript:void(0)" id="mobileSignUp">S'inscrire</a></p>
+            </form>
+        </div>
+
+        <!-- FORMULAIRE INSCRIPTION UTILISATEUR -->
+        <div class="form-container sign-up-container" id="userSignupForm">
+            <form action="{% url 'auth' %}" method="POST">
+                {% csrf_token %}
+                <h1>S'<em>inscrire</em></h1>
+                <div class="field">
+                    <input type="text" name="full_name" placeholder="Nom complet" required />
+                </div>
+                <div class="field">
+                    <input type="email" name="email" placeholder="Adresse email" required />
+                </div>
+                <div class="field">
+                    <input type="password" name="password" placeholder="Mot de passe" required />
+                </div>
+                <input type="hidden" name="user_type" value="user" />
+                <button type="submit">Créer mon compte</button>
+                <p class="mobile-switch">Déjà inscrit ? <a href="javascript:void(0)" class="mobileSignIn">Se connecter</a></p>
+            </form>
+        </div>
+
+        <!-- FORMULAIRE INSCRIPTION RESTAURANT -->
+        <div class="form-container sign-up-container" id="restaurantSignupForm" style="display:none;">
+            <form action="{% url 'auth' %}" method="POST">
+                {% csrf_token %}
+                <h1>Inscription <em>Restaurant</em></h1>
+                <div class="field">
+                    <input type="text" name="restaurant_name" placeholder="Nom du restaurant" required />
+                </div>
+                <div class="field">
+                    <input type="text" name="cin" placeholder="CIN du responsable" required />
+                </div>
+                <div class="field">
+                    <input type="tel" name="phone" placeholder="Téléphone" required />
+                </div>
+                <div class="field">
+                    <input type="email" name="email" placeholder="Email professionnel" required />
+                </div>
+                <div class="field">
+                    <input type="password" name="password" placeholder="Mot de passe" required />
+                </div>
+                <div class="field">
+                    <input type="text" name="address" placeholder="Adresse complète" required />
+                </div>
+                <div class="field-row">
+                    <select name="gouvernorat" id="gouvernorat">
+                        <option value="">Gouvernorat</option>
+                        <option value="tunis">Tunis</option>
+                        <option value="ariana">Ariana</option>
+                        <option value="benarous">Ben Arous</option>
+                        <option value="manouba">La Manouba</option>
+                        <option value="nabeul">Nabeul</option>
+                        <option value="zaghouan">Zaghouan</option>
+                        <option value="bizerte">Bizerte</option>
+                        <option value="beja">Béja</option>
+                        <option value="jendouba">Jendouba</option>
+                        <option value="kef">Le Kef</option>
+                        <option value="siliana">Siliana</option>
+                        <option value="sousse">Sousse</option>
+                        <option value="monastir">Monastir</option>
+                        <option value="mahdia">Mahdia</option>
+                        <option value="sfax">Sfax</option>
+                        <option value="kairouan">Kairouan</option>
+                        <option value="kasserine">Kasserine</option>
+                        <option value="sidibouzid">Sidi Bouzid</option>
+                        <option value="gabes">Gabès</option>
+                        <option value="medenine">Médenine</option>
+                        <option value="tataouine">Tataouine</option>
+                        <option value="gafsa">Gafsa</option>
+                        <option value="tozeur">Tozeur</option>
+                        <option value="kebili">Kébili</option>
+                    </select>
+                    <select name="ville" id="ville">
+                        <option value="">Ville</option>
+                    </select>
+                    <input type="text" name="postal_code" placeholder="Code postal" />
+                </div>
+                <input type="hidden" name="user_type" value="restaurant" />
+                <button type="submit">Créer le restaurant</button>
+                <p class="mobile-switch">Déjà inscrit ? <a href="javascript:void(0)" class="mobileSignIn">Se connecter</a></p>
+            </form>
+        </div>
+
+        <!-- PANNEAU OVERLAY (qui slide) -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <div class="overlay-content">
+                        <div class="deco-icon"><i class="fas fa-utensils"></i></div>
+                        <h2>Déjà inscrit ?</h2>
+                        <p>Connectez-vous pour accéder à votre espace</p>
+                        <button class="ghost" id="signIn">Se connecter</button>
+                    </div>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <div class="overlay-content">
+                        <div class="deco-icon"><i class="fas fa-utensils"></i></div>
+                        <h2>Nouveau sur I-<em>Neklou</em> ?</h2>
+                        <p>Créez votre compte et découvrez les meilleurs restaurants</p>
+                        <button class="ghost" id="signUp">S'inscrire</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% if messages %}
+<div class="messages-fixed">
+    {% for message in messages %}
+    <div class="msg-item">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<script src="{% static 'user/auth.js' %}"></script>
+
+</body>
+</html>

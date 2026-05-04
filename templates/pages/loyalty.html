@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fidélité — I-Neklou</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'user/styles.css' %}?v={% now 'U' %}">
+    <link rel="stylesheet" href="{% static 'user/loyalty.css' %}?v={% now 'U' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo-container">
+                    <a href="{% url 'index' %}" class="logo-link">
+                        <i class="fas fa-utensils logo-icon"></i>
+                        <span class="logo-text">-Neklou</span>
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="{% url 'index' %}">Accueil</a></li>
+                    <li><a href="{% url 'favorites' %}">Favoris</a></li>
+                    <li><a href="{% url 'loyalty' %}">Fidélité</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'mon_compte' %}" class="btn btn-outline">
+                        <i class="fas fa-user-circle"></i> {{ user.first_name|default:user.username }}
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-primary">Déconnexion</a>
+                    {% else %}
+                    <a href="{% url 'auth' %}" class="btn btn-outline">Connexion</a>
+                    <a href="{% url 'auth' %}" class="btn btn-primary">S'inscrire</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="loyalty-hero">
+        <div class="container">
+            <h1>Programme de <em>Fidélité</em></h1>
+            <p>Accumulez des points et profitez d'avantages exclusifs</p>
+        </div>
+        <div class="loyalty-hero-border"></div>
+    </section>
+
+    <div class="loyalty-container">
+
+        <!-- POINTS CARD -->
+        <div class="points-card">
+            <div class="points-left">
+                <span class="points-badge">
+                    <i class="fas fa-crown"></i> {{ tier_name }}
+                </span>
+                <div class="current-points">
+                    {{ loyalty.points }}
+                    <span>points</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ progress_percent }}%"></div>
+                </div>
+                <div class="tier-info">
+                    <span><i class="fas fa-medal"></i> Niveau : <strong>{{ tier_name }}</strong></span>
+                    {% if next_tier != "Maximum" %}
+                    <span>Prochain : <strong>{{ next_tier }}</strong> — {{ points_needed }} pts restants</span>
+                    {% else %}
+                    <span><i class="fas fa-star"></i> Niveau maximum atteint !</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="rewards-grid">
+                <div class="reward-item">
+                    <div class="reward-icon"><i class="fas fa-tag"></i></div>
+                    <div class="reward-value">100 pts</div>
+                    <div class="reward-desc">= 10 DT de réduction</div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-icon"><i class="fas fa-utensils"></i></div>
+                    <div class="reward-value">250 pts</div>
+                    <div class="reward-desc">= Entrée offerte</div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-icon"><i class="fas fa-wine-glass"></i></div>
+                    <div class="reward-value">500 pts</div>
+                    <div class="reward-desc">= Plat offert</div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-icon"><i class="fas fa-crown"></i></div>
+                    <div class="reward-value">1 000 pts</div>
+                    <div class="reward-desc">= Menu dégustation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLLECTER DES POINTS -->
+        <section class="collect-section">
+            <h2 class="section-title"><i class="fas fa-qrcode"></i> Collecter mes points</h2>
+            <p>Saisissez le code reçu lors de votre passage au restaurant.</p>
+            <form method="POST" action="{% url 'loyalty' %}" class="code-form">
+                {% csrf_token %}
+                <div class="code-input-group">
+                    <input type="text" name="loyalty_code" placeholder="Ex: DINETUNIS100" required maxlength="20">
+                    <button type="submit"><i class="fas fa-paper-plane"></i> Valider</button>
+                </div>
+            </form>
+            <div class="demo-codes">
+                <i class="fas fa-info-circle"></i> Codes de test :
+                {% for code in valid_codes_demo %}
+                    <code>{{ code }}</code>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- NIVEAUX -->
+        <h2 class="section-title"><i class="fas fa-layer-group"></i> Nos niveaux</h2>
+        <div class="tiers-grid">
+            <div class="tier-card {% if loyalty.tier == 'ekoul' %}current{% endif %}">
+                <div class="tier-icon bronze"><i class="fas fa-medal"></i></div>
+                <div class="tier-name">Ekoul</div>
+                <div class="tier-points">0 – 199 pts</div>
+                <ul class="tier-benefits">
+                    <li><i class="fas fa-check"></i> 1 point = 1 DT</li>
+                    <li><i class="fas fa-check"></i> 10 pts = 1 DT réduc</li>
+                </ul>
+            </div>
+            <div class="tier-card {% if loyalty.tier == 'ekoul_kbir' %}current{% endif %}">
+                <div class="tier-icon silver"><i class="fas fa-medal"></i></div>
+                <div class="tier-name">Ekoul Kbir</div>
+                <div class="tier-points">200 – 499 pts</div>
+                <ul class="tier-benefits">
+                    <li><i class="fas fa-check"></i> 8 pts = 1 DT réduc</li>
+                    <li><i class="fas fa-check"></i> +25% bonus</li>
+                </ul>
+            </div>
+            <div class="tier-card {% if loyalty.tier == 'makhmekh' %}current{% endif %}">
+                <div class="tier-icon gold"><i class="fas fa-crown"></i></div>
+                <div class="tier-name">Makhmekh</div>
+                <div class="tier-points">500 – 999 pts</div>
+                <ul class="tier-benefits">
+                    <li><i class="fas fa-check"></i> 5 pts = 1 DT réduc</li>
+                    <li><i class="fas fa-check"></i> +50% bonus</li>
+                    <li><i class="fas fa-check"></i> Priorité résa</li>
+                </ul>
+            </div>
+            <div class="tier-card {% if loyalty.tier == 'makhmekh_kbir' %}current{% endif %}">
+                <div class="tier-icon platinum"><i class="fas fa-gem"></i></div>
+                <div class="tier-name">Makhmekh Kbir</div>
+                <div class="tier-points">1000+ pts</div>
+                <ul class="tier-benefits">
+                    <li><i class="fas fa-check"></i> 3 pts = 1 DT réduc</li>
+                    <li><i class="fas fa-check"></i> +100% bonus</li>
+                    <li><i class="fas fa-check"></i> Accès VIP</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- COUPONS LIÉS AUX POINTS MONGODB -->
+        <h2 class="section-title" style="margin-top: 80px;"><i class="fas fa-ticket-alt"></i> Mes coupons disponibles</h2>
+        {% if available_coupons %}
+        <p class="coupons-intro">Vous avez <strong>{{ loyalty.points }} points</strong> — voici les récompenses que vous pouvez utiliser :</p>
+        <div class="coupons-grid">
+            {% for coupon in available_coupons %}
+            <div class="coupon-card">
+                <div class="coupon-icon"><i class="{{ coupon.icon }}"></i></div>
+                <div class="coupon-value">{{ coupon.value }}</div>
+                <div class="coupon-desc">{{ coupon.desc }}</div>
+                <div class="coupon-cost">{{ coupon.cost }} pts requis</div>
+                <div class="coupon-code">{{ coupon.code }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="coupons-empty">
+            <i class="fas fa-coins"></i>
+            <p>Accumulez <strong>100 points</strong> pour débloquer votre premier coupon.</p>
+            <span>Vous avez actuellement {{ loyalty.points }} points.</span>
+        </div>
+        {% endif %}
+
+        <!-- HISTORIQUE -->
+        <div class="history-section" style="margin-top: 80px;">
+            <h2 class="section-title"><i class="fas fa-history"></i> Historique des points</h2>
+            <div class="history-list">
+                {% for tx in transactions %}
+                <div class="history-item">
+                    <div class="history-left">
+                        <div class="history-icon">
+                            {% if tx.transaction_type == 'earned' %}<i class="fas fa-plus"></i>
+                            {% elif tx.transaction_type == 'spent' %}<i class="fas fa-minus"></i>
+                            {% else %}<i class="fas fa-star"></i>{% endif %}
+                        </div>
+                        <div class="history-details">
+                            <h4>{{ tx.description }}</h4>
+                            <p>{{ tx.created_at|date:"d F Y • H:i" }}</p>
+                        </div>
+                    </div>
+                    <div class="history-points {% if tx.points > 0 %}positive{% endif %}">
+                        {% if tx.points > 0 %}+{% endif %}{{ tx.points }} pts
+                    </div>
+                </div>
+                {% empty %}
+                <div class="history-empty">
+                    <i class="fas fa-info-circle"></i> Aucun historique pour le moment.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- COMMENT ÇA MARCHE -->
+        <div class="how-it-works" style="margin-top: 80px;">
+            <h2 class="section-title"><i class="fas fa-question-circle"></i> Comment ça marche ?</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-calendar-check"></i></div>
+                    <h3>1. Réservez</h3>
+                    <p>Dans nos restaurants partenaires</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-coins"></i></div>
+                    <h3>2. Cumulez</h3>
+                    <p>Utilisez le code sur votre ticket</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-gift"></i></div>
+                    <h3>3. Profitez</h3>
+                    <p>Échangez vos points contre des cadeaux</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div>
+                    <div class="footer-brand">I-<em>Neklou</em></div>
+                    <div class="footer-tagline">Votre guide gastronomique</div>
+                </div>
+                <div class="footer-links">
+                    <a href="{% url 'index' %}">Accueil</a>
+                    <a href="{% url 'favorites' %}">Favoris</a>
+                    <a href="{% url 'loyalty' %}">Fidélité</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 I-Neklou — Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="message"><i class="fas fa-check-circle"></i> {{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</body>
+</html>

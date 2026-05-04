@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte - I-Neklou</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'user/mon_compte.css' %}?v={% now 'U' %}">
+    <link rel="stylesheet" href="{% static 'user/styles.css' %}?v={% now 'U' %}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+
+                <a href="{% url 'index' %}" class="logo">
+                    <span class="logo-text">I-Neklou</span>
+                </a>
+
+                <ul class="nav-links">
+                    <li><a href="{% url 'index' %}">Accueil</a></li>
+                    <li><a href="{% url 'favorites' %}">Favoris</a></li>
+                    <li><a href="{% url 'loyalty' %}">Loyalty</a></li>
+                </ul>
+
+                <div class="auth-buttons">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'mon_compte' %}" class="btn btn-outline">
+                        <i class="fas fa-user-circle"></i> {{ user.first_name|default:user.username }}
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-primary">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </a>
+                    {% else %}
+                    <a href="{% url 'auth' %}" class="btn btn-outline">Connexion</a>
+                    <a href="{% url 'auth' %}" class="btn btn-primary">S'inscrire</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="compte-wrapper">
+        <div class="welcome-card">
+            <h1>Bonjour, <em>{{ user.first_name|default:user.username }}</em></h1>
+            <p>Votre espace personnel</p>
+        </div>
+
+        <div class="sections-menu">
+            <button class="section-tab active" data-section="profil">
+                <i class="fas fa-user-circle"></i> Profil
+            </button>
+            <button class="section-tab" data-section="reservations">
+                <i class="fas fa-calendar-check"></i> Réservations
+            </button>
+            <button class="section-tab" data-section="parametres">
+                <i class="fas fa-sliders-h"></i> Paramètres
+            </button>
+        </div>
+
+        <div class="section-container">
+            <div id="section-profil" class="compte-section" style="display: block;">
+                <h2 class="section-title"><i class="fas fa-user-circle"></i> Mes informations</h2>
+                <form class="profil-form" method="POST" action="{% url 'modifier_profil' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label><i class="far fa-user"></i> Prénom</label>
+                        <input type="text" name="prenom" value="{{ profil_prenom }}" placeholder="Votre prénom">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="far fa-user"></i> Nom</label>
+                        <input type="text" name="nom" value="{{ profil_nom }}" placeholder="Votre nom">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="far fa-envelope"></i> Email</label>
+                        <input type="email" name="email" value="{{ profil_email }}" placeholder="votre@email.com">
+                    </div>
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-check"></i> Enregistrer
+                    </button>
+                </form>
+            </div>
+
+
+
+            <!-- Section Réservations -->
+            <div id="section-reservations" class="compte-section" style="display: none;">
+                <h2 class="section-title"><i class="fas fa-calendar-check"></i> Mes réservations</h2>
+
+                {% if reservations %}
+                {% for reservation in reservations %}
+                <div class="historique-item">
+                    <div class="item-header">
+                        <h4>{{ reservation.restaurant_name }}</h4>
+                        <span class="item-date">{{ reservation.formatted_date }}</span>
+                    </div>
+                    <div class="item-details">
+                        <p><i class="fas fa-users" style="color: var(--premium-gold);"></i> {{ reservation.guests }} personnes à {{ reservation.formatted_time }}</p>
+                        <span class="statut 
+                    {% if reservation.status == 'confirmed' %}confirme
+                    {% elif reservation.status == 'pending' %}attente
+                    {% elif reservation.status == 'cancelled' %}annule
+                    {% endif %}">
+                            {% if reservation.status == 'pending' %}En attente
+                            {% elif reservation.status == 'confirmed' %}Confirmée
+                            {% elif reservation.status == 'cancelled' %}Annulée
+                            {% else %}{{ reservation.status }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-calendar-times"></i>
+                    <p>Aucune réservation pour le moment</p>
+                    <a href="{% url 'index' %}" class="btn btn-primary">Découvrir des restaurants</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div id="section-parametres" class="compte-section" style="display: none;">
+                <h2 class="section-title"><i class="fas fa-sliders-h"></i> Paramètres</h2>
+
+                <div class="settings-form-wrapper">
+                    <h3><i class="fas fa-lock"></i> Changer le mot de passe</h3>
+                    <form class="settings-form" method="POST" action="{% url 'modifier_profil' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Mot de passe actuel</label>
+                            <input type="password" name="old_password" placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label>Nouveau mot de passe</label>
+                            <input type="password" name="new_password" placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmer le nouveau mot de passe</label>
+                            <input type="password" name="confirm_password" placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-key"></i> Mettre à jour
+                        </button>
+                    </form>
+                </div>
+
+                <div class="danger-zone">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Suppression du compte</h3>
+                    <p>Cette action est irréversible. Toutes vos données seront définitivement supprimées.</p>
+                    <button class="btn-danger" id="btnSupprimerCompte">
+                        <i class="fas fa-trash-alt"></i> Supprimer mon compte
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="message">
+                <i class="fas fa-check-circle"></i> {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="{% static 'user/mon_compte.js' %}"></script>
+</body>
+
+</html>

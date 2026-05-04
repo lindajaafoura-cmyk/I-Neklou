@@ -1,0 +1,49 @@
+@startuml UC9 – Gérer la fidélité (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam sequenceBoxBorderColor #C48EA1
+skinparam sequenceBoxBackgroundColor #FDF0F5
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Gérer la fidélité
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_Fidélité" as UI
+control "Controller" as C
+entity "LoyaltyPoints" as DB
+
+ref over U, UI, C, DB : (S'authentifier)
+
+U -> UI : 1 : Accéder à la page "Fidélité"
+UI -> C : 2 : Demander les données
+C -> DB : 3 : get(user)
+DB --> C : 4 : Retourner points + niveau + historique
+C --> UI : 5 : Transmettre les données
+UI --> U : 6 : Afficher points, niveau et historique
+
+U -> UI : 7 : Saisir un code fidélité
+UI -> C : 8 : Envoyer le code (POST)
+
+C -> C : 9 : Vérifier le code
+
+alt [code invalide]
+    C --> UI : 10 : Afficher "Code invalide"
+else [code déjà utilisé]
+    C -> DB : 10 : filter(description=code)
+    C --> UI : 11 : Afficher "Code déjà utilisé"
+else [code valide]
+    C -> DB : 10 : loyalty_points.save()
+    C -> DB : 11 : LoyaltyTransaction.create()
+    C --> UI : 12 : Afficher les points gagnés
+    UI --> U : 13 : Redirection vers "Fidélité"
+end
+
+@enduml

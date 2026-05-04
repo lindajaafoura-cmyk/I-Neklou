@@ -1,0 +1,40 @@
+@startuml UC1 – S'inscrire (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction S'inscrire
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+U -> S : 1 : Cliquer sur "S'inscrire"
+S --> U : 2 : Afficher le formulaire d'inscription
+
+U -> S : 3 : Remplir le formulaire
+S -> S : 4 : Vérifier les données
+
+alt [champ vide]
+    S --> U : 5 : Afficher message "Veuillez remplir ce champ"
+else [champ rempli]
+    alt [données incorrectes (format email invalide / mot de passe trop court)]
+        S --> U : 6 : Afficher message "Veuillez vérifier les données saisies"
+    else [données correctes]
+        alt [email déjà utilisé]
+            S --> U : 7 : Afficher message "Cet email est déjà utilisé"
+        else [email disponible]
+            S -> S : 8 : Ajouter utilisateur
+            S --> U : 9 : Redirection vers la page d'accueil
+        end
+    end
+end
+
+@enduml

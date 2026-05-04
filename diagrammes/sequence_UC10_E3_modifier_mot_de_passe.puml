@@ -1,0 +1,40 @@
+@startuml UC10-E3 – Modifier le mot de passe (Diagramme de Séquence Système)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #6FA8DC
+skinparam sequenceParticipantBackgroundColor #CFE2F3
+skinparam sequenceActorBorderColor #6FA8DC
+skinparam sequenceActorBackgroundColor #CFE2F3
+skinparam sequenceLifeLineBorderColor #6FA8DC
+skinparam SequenceGroupBorderColor #6FA8DC
+skinparam SequenceGroupBackgroundColor #E8F0FB
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Modifier le mot de passe
+
+actor "Utilisateur: Actor1" as U
+participant "Système" as S
+
+ref over U, S : (S'authentifier)
+ref over U, S : (Consulter l'espace compte)
+
+U -> S : 1 : Saisir l'ancien et le nouveau mot de passe
+S -> S : 2 : Vérifier les données
+
+alt [champ vide]
+    S --> U : 3 : Afficher un message d'erreur
+else [champ rempli]
+    alt [ancien mot de passe incorrect]
+        S --> U : 4 : Afficher un message d'erreur
+    else [ancien mot de passe correct]
+        alt [nouveau mot de passe ne correspond pas à la confirmation]
+            S --> U : 5 : Afficher un message d'erreur
+        else [nouveau mot de passe correspond]
+            S -> S : 6 : Enregistrer le nouveau mot de passe
+            S --> U : 7 : Redirection vers "Mon Compte"
+        end
+    end
+end
+
+@enduml

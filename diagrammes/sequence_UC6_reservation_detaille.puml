@@ -1,0 +1,42 @@
+@startuml UC6 – Réserver une table (Diagramme de Séquence Détaillé)
+
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam sequenceParticipantBorderColor #C48EA1
+skinparam sequenceParticipantBackgroundColor #F8D7E3
+skinparam sequenceActorBorderColor #C48EA1
+skinparam sequenceActorBackgroundColor #F8D7E3
+skinparam sequenceLifeLineBorderColor #C48EA1
+skinparam sequenceBoxBorderColor #C48EA1
+skinparam sequenceBoxBackgroundColor #FDF0F5
+skinparam SequenceGroupBorderColor #C48EA1
+skinparam SequenceGroupBackgroundColor #FDF0F5
+skinparam SequenceGroupBodyBackgroundColor #FFFFFF
+
+title interaction Réserver une table
+
+actor "Utilisateur: Actor1" as U
+boundary "UI_Réservation" as UI
+control "Controller" as C
+entity "Réservation" as DB
+
+ref over U, UI, C, DB : (S'authentifier)
+ref over U, UI, C, DB : (Consulter les détails d'un restaurant)
+
+U -> UI : 1 : Cliquer sur "Réserver"
+UI --> U : 2 : Afficher le formulaire de réservation
+
+U -> UI : 3 : Remplir le formulaire\n(date, heure, couverts, demandes)
+UI -> C : 4 : Envoyer les données (POST)
+
+C -> C : 5 : Vérifier les données
+
+alt [champ obligatoire vide]
+    C --> UI : 6 : Afficher un message d'erreur
+else [données valides]
+    C -> DB : 6 : Reservation.save()
+    C --> UI : 7 : Afficher confirmation
+    UI --> U : 8 : Redirection vers "Mon Compte"
+end
+
+@enduml
