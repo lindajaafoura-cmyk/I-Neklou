@@ -1,16 +1,16 @@
 :root {
-    --basil: #4A6B53;
-    --basil-light: #5d8768;
-    --basil-dark: #37503e;
-    --cream: #FFF6E0;
-    --cream-dark: #E6DECA;
-    --dark: #1A1A1A;
-    --gray: #999999;
+    --basil: #2D5A3B;
+    --basil-light: #3d734e;
+    --basil-dark: #23472f;
+    --cream: #F9F6F0;
+    --cream-dark: #F0EBE0;
+    --dark: #1A281B;
+    --gray: #707070;
     --white: #FFFFFF;
-    --gold: #E8B44A;
-    --gold-light: #f7ca6f;
-    --terracotta: #C86B53;
-    --terra-light: #e68870;
+    --gold: #D4AF37;
+    --gold-light: #F0C040;
+    --terracotta: #C96E4B;
+    --terra-light: #E89D7A;
 }
 
 html { scroll-behavior: smooth; }
@@ -131,7 +131,7 @@ body {
 /* Fondu bas vers la page */
 .hero-fade-bottom {
     height: 80px;
-    background: linear-gradient(transparent, var(--dark));
+    background: linear-gradient(transparent, var(--cream));
     position: absolute;
     bottom: 0;
     left: 0;
@@ -253,7 +253,7 @@ body {
     align-items: flex-start;
 }
 
-/* Sidebar creamy/dark */
+/* Sidebar creamy */
 .sidebar {
     width: 230px;
     flex-shrink: 0;
